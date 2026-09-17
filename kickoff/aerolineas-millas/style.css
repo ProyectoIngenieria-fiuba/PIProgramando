@@ -1,0 +1,98 @@
+:root {
+  --azul: #003b71;
+  --celeste: #00a1de;
+  --gris-claro: #f4f6f8;
+  --gris-borde: #d7dde3;
+  --texto: #1c1f24;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gris-claro);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--texto);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 24px rgba(0, 59, 113, 0.12);
+}
+
+.franja {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--azul), var(--celeste));
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 1.3rem;
+  margin: 0 0 0.25rem;
+  color: var(--azul);
+}
+
+.subtitulo {
+  margin: 0 0 1.5rem;
+  color: #5a6673;
+  font-size: 0.9rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  margin-top: 1rem;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--gris-borde);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--azul);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--celeste);
+}
+
+.resultado {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--gris-claro);
+  border: 1px solid var(--gris-borde);
+  font-weight: 600;
+  text-align: center;
+}
+
+.oculto {
+  display: none;
+}

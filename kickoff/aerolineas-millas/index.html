@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Millas — Aerolíneas (demo)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="card">
+    <div class="franja"></div>
+    <h1>Calculadora de Millas</h1>
+    <p class="subtitulo">
+      Demo ficticia · taller "Hola, PI" (FIUBA) · sin relación con sistemas
+      reales de ninguna aerolínea
+    </p>
+
+    <form id="form-millas">
+      <label for="categoria">Categoría del pasajero</label>
+      <select id="categoria" required>
+        <option value="Económica">Económica</option>
+        <option value="Plata">Plata</option>
+        <option value="Oro">Oro</option>
+        <option value="Platino">Platino</option>
+      </select>
+
+      <label for="distancia">Distancia del vuelo (km)</label>
+      <input
+        type="number"
+        id="distancia"
+        min="1"
+        step="1"
+        placeholder="Ej: 1500"
+        required
+      />
+
+      <button type="submit">Calcular millas</button>
+    </form>
+
+    <p id="resultado" class="resultado oculto"></p>
+  </div>
+
+  <script src="millas.js"></script>
+</body>
+</html>

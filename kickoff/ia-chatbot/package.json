@@ -1,0 +1,16 @@
+{
+  "name": "ia-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo de chatbot de soporte con LLM para el taller Hola, PI",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.22.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  }
+}
