@@ -1,4 +1,4 @@
-# Progreso — Demo "Hola, PI" (Panel de Estaciones de Servicio)
+# Progreso — Demo PIP (Panel de Estaciones de Servicio)
 
 Resumen de lo armado hasta ahora en `taller-pip/kickoff/front-back/`.
 

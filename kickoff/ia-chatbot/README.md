@@ -1,10 +1,10 @@
-# Chatbot de Soporte ARSAT — Demo "Hola, PI"
+# Chatbot de Soporte ARSAT — Demo PIP
 
 Chatbot de soporte técnico ficticio para consultas de conectividad (internet
 satelital), que responde usando un LLM (Gemini) vía API.
 
 > Nota: esta app es una ambientación ficticia con fines educativos para el
-> taller "Hola, PI" (Proyecto Ingeniería, FIUBA). No representa sistemas,
+> taller PIP (Proyecto Ingeniería, FIUBA). No representa sistemas,
 > datos ni procesos reales de ARSAT ni de ninguna otra empresa.
 
 ## Stack

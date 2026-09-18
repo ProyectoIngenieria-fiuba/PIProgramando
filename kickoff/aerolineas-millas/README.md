@@ -1,11 +1,11 @@
-# Calculadora de Millas — Demo "Hola, PI"
+# Calculadora de Millas — Demo PIP
 
 Mini-app ficticia que calcula las millas que gana un pasajero según su
 categoría (Económica, Plata, Oro, Platino) y la distancia del vuelo. Fue
 vibecodeada a partir del prompt que está en [PROMPT_ORIGINAL.md](./PROMPT_ORIGINAL.md).
 
 > Nota: esta app es una ambientación ficticia con fines educativos para el
-> taller "Hola, PI" (Proyecto Ingeniería, FIUBA). No representa sistemas,
+> taller PIP (Proyecto Ingeniería, FIUBA). No representa sistemas,
 > datos ni procesos reales de Aerolíneas Argentinas ni de ninguna otra
 > empresa.
 

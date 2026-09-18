@@ -1,4 +1,4 @@
-# Panel de Estaciones de Servicio — Demo "Hola, PI"
+# Panel de Estaciones de Servicio — Demo PIP
 
 Panel interno ficticio para gestionar el stock de combustible de una red de
 estaciones de servicio. Cada estación se muestra con un semáforo de estado:
@@ -8,7 +8,7 @@ estaciones de servicio. Cada estación se muestra con un semáforo de estado:
 - 🔴 Rojo: stock crítico
 
 > Nota: esta app es una ambientación ficticia con fines educativos para el
-> taller "Hola, PI" (Proyecto Ingeniería, FIUBA). No representa sistemas,
+> taller PIP (Proyecto Ingeniería, FIUBA). No representa sistemas,
 > datos ni procesos reales de ninguna empresa.
 
 ## Stack

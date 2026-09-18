@@ -1,10 +1,10 @@
-# Rendimiento de Cultivos por Provincia — Demo "Hola, PI"
+# Rendimiento de Cultivos por Provincia — Demo PIP
 
 Análisis de un dataset de rendimiento de soja y maíz por provincia y campaña
 agrícola, ambientado en el mundo del agro argentino.
 
 > Nota: este dataset es una ambientación ficticia con fines educativos para
-> el taller "Hola, PI" (Proyecto Ingeniería, FIUBA). No representa datos
+> el taller PIP (Proyecto Ingeniería, FIUBA). No representa datos
 > reales del INTA ni de ningún organismo.
 
 ## Objetivo del análisis
