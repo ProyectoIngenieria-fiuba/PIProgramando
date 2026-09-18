@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscador de Vuelos — Aerolíneas (demo)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="card">
+    <div class="franja"></div>
+    <h1>Buscador de Vuelos</h1>
+    <p class="subtitulo">
+      Actividad de cierre · taller PIP (FIUBA) · app ficticia, sin
+      relación con sistemas reales de ninguna aerolínea
+    </p>
+
+    <label for="buscador">Buscar por destino</label>
+    <input
+      type="text"
+      id="buscador"
+      placeholder="Ej: bariloche, cordoba, salta..."
+      autocomplete="off"
+    />
+
+    <div id="lista-vuelos" class="lista-vuelos"></div>
+    <p id="mensaje-vacio" class="mensaje-vacio oculto"></p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
