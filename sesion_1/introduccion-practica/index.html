@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practicá acá — Lista de tareas (Taller PIP)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="tarjeta">
+    <header>
+      <h1>📝 Lista de tareas</h1>
+      <p class="aviso">
+        Proyecto de práctica del taller PIP — no forma parte de ningún
+        ejercicio con bugs. Es el mismo ejemplo de la introducción a Front y
+        Back, pero corriendo de verdad para que lo toques.
+      </p>
+    </header>
+
+    <form id="form-nueva-tarea">
+      <input
+        id="nueva-tarea"
+        type="text"
+        placeholder="Escribí una tarea nueva..."
+        autocomplete="off"
+      >
+      <button type="submit">Agregar</button>
+    </form>
+
+    <p id="contador" class="contador"></p>
+
+    <ul id="lista-tareas" class="lista-tareas"></ul>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
