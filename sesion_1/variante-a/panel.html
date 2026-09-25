@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de sensores — Panel INVAP (ficticio)</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">
+      <span class="navbar__marca-icono">🔬</span>
+      Panel INVAP <span style="opacity:.6; font-weight:400;">(ficticio)</span>
+    </a>
+    <div class="navbar__links">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="acerca.html">Nosotros</a>
+      <a class="nav__link" href="panel.html">Panel de sensores</a>
+      <a class="nav__link" href="historial.html">Historial de alertas</a>
+      <button id="toggle-tema" class="nav__tema" type="button" aria-label="Cambiar tema">🌙 / ☀️</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="pagina-header">
+      <h1>Panel de sensores</h1>
+      <p>Estado en tiempo real de los sensores del reactor.</p>
+    </div>
+
+    <section id="panel">
+      <div class="resumen">
+        <div class="resumen__item resumen__item--total">
+          <span class="resumen__numero" id="contador-total">0</span>
+          <span class="resumen__label">Sensores monitoreados</span>
+        </div>
+        <div class="resumen__item resumen__item--verde">
+          <span class="resumen__numero" id="contador-verde">0</span>
+          <span class="resumen__label">Verde</span>
+        </div>
+        <div class="resumen__item resumen__item--amarillo">
+          <span class="resumen__numero" id="contador-amarillo">0</span>
+          <span class="resumen__label">Amarillo</span>
+        </div>
+        <div class="resumen__item resumen__item--rojo">
+          <span class="resumen__numero" id="contador-rojo">0</span>
+          <span class="resumen__label">Rojo</span>
+        </div>
+      </div>
+
+      <div id="lista-sensores" class="grid-sensores"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__contenido">
+      <div>
+        <p class="footer__marca">🔬 Panel INVAP (ficticio)</p>
+        <p class="footer__nota">
+          Proyecto ficticio con fines educativos — Taller PIP (Proyecto
+          Ingeniería, FIUBA). Ambientado en INVAP, empresa nacional de
+          tecnología argentina, pero sin relación con sistemas, datos ni
+          procesos reales de la empresa.
+        </p>
+      </div>
+      <nav class="footer__links">
+        <a href="index.html">Inicio</a>
+        <a href="acerca.html">Nosotros</a>
+        <a href="panel.html">Panel de sensores</a>
+        <a href="historial.html">Historial de alertas</a>
+      </nav>
+    </div>
+    <p class="footer__bottom">Taller PIP · Proyecto Ingeniería, FIUBA</p>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/logica.js"></script>
+  <script src="js/ui-panel.js"></script>
+  <script src="js/tema.js"></script>
+</body>
+</html>

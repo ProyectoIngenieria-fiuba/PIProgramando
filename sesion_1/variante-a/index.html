@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel INVAP (ficticio) — Monitoreo de reactor</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">
+      <span class="navbar__marca-icono">🔬</span>
+      Panel INVAP <span style="opacity:.6; font-weight:400;">(ficticio)</span>
+    </a>
+    <div class="navbar__links">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="acerca.html">Nosotros</a>
+      <a class="nav__link" href="panel.html">Panel de sensores</a>
+      <a class="nav__link" href="historial.html">Historial de alertas</a>
+      <button id="toggle-tema" class="nav__tema" type="button" aria-label="Cambiar tema">🌙 / ☀️</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <span class="hero__badge">Proyecto ficticio · fines educativos</span>
+      <h1>Monitoreo en tiempo real de un reactor de investigación</h1>
+      <p class="hero__subtitulo">
+        Seguimos de cerca la presión, la temperatura y el nivel de radiación
+        del núcleo para anticipar cualquier desvío antes de que sea un
+        problema. Una ambientación ficticia de INVAP para el taller PIP.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primario" href="panel.html">Ver panel de sensores</a>
+        <a class="btn btn--secundario" href="acerca.html">Conocé el proyecto</a>
+      </div>
+    </section>
+
+    <section class="stats-teaser">
+      <div class="stat-card">
+        <span class="stat-card__numero">3</span>
+        <span class="stat-card__label">Sensores monitoreados</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__numero">24/7</span>
+        <span class="stat-card__label">Actualización en vivo</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__numero">100%</span>
+        <span class="stat-card__label">Ficticio, fines educativos</span>
+      </div>
+    </section>
+
+    <section class="nosotros-preview">
+      <div class="nosotros-preview__texto">
+        <h2>¿Quiénes somos?</h2>
+        <p>
+          Somos un panel de monitoreo ficticio armado para el taller PIP
+          (Proyecto Ingeniería, FIUBA), inspirado libremente en INVAP,
+          empresa nacional de tecnología argentina. Este proyecto no
+          representa sistemas, datos ni procesos reales de la empresa ni de
+          ningún reactor existente.
+        </p>
+        <a class="btn btn--secundario" href="acerca.html">Conocé más sobre el proyecto →</a>
+      </div>
+      <div class="nosotros-preview__panel">
+        <h3>Cómo leer el semáforo</h3>
+        <ul class="acerca__lista">
+          <li><span class="etiqueta-estado estado-verde">Verde</span> — rango normal.</li>
+          <li><span class="etiqueta-estado estado-amarillo">Amarillo</span> — zona de atención.</li>
+          <li><span class="etiqueta-estado estado-rojo">Rojo</span> — fuera de rango seguro.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__contenido">
+      <div>
+        <p class="footer__marca">🔬 Panel INVAP (ficticio)</p>
+        <p class="footer__nota">
+          Proyecto ficticio con fines educativos — Taller PIP (Proyecto
+          Ingeniería, FIUBA). Ambientado en INVAP, empresa nacional de
+          tecnología argentina, pero sin relación con sistemas, datos ni
+          procesos reales de la empresa.
+        </p>
+      </div>
+      <nav class="footer__links">
+        <a href="index.html">Inicio</a>
+        <a href="acerca.html">Nosotros</a>
+        <a href="panel.html">Panel de sensores</a>
+        <a href="historial.html">Historial de alertas</a>
+      </nav>
+    </div>
+    <p class="footer__bottom">Taller PIP · Proyecto Ingeniería, FIUBA</p>
+  </footer>
+
+  <script src="js/tema.js"></script>
+</body>
+</html>

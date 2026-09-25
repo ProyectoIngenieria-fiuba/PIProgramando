@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros — CONAE Lanzamientos (ficticio)</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">
+      <span class="navbar__marca-icono">🛰️</span>
+      CONAE Lanzamientos <span style="opacity:.6; font-weight:400;">(ficticio)</span>
+    </a>
+    <div class="navbar__links">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="acerca.html">Nosotros</a>
+      <a class="nav__link" href="lanzamientos.html">Lanzamientos</a>
+      <a class="nav__link" href="pasados.html">Lanzamientos pasados</a>
+      <button id="toggle-tema" class="nav__tema" type="button" aria-label="Cambiar tema">🌙 / ☀️</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="pagina-header">
+      <h1>Nosotros</h1>
+      <p>Quiénes armamos este panel, y qué representa (y qué no).</p>
+    </div>
+
+    <section class="acerca">
+      <h2>Sobre el proyecto</h2>
+      <p>
+        Este panel de seguimiento de lanzamientos es un ejercicio del taller
+        PIP (Proyecto Ingeniería, FIUBA). Ambienta un programa espacial
+        ficticio, inspirado libremente en CONAE (Comisión Nacional de
+        Actividades Espaciales) — pero no representa sistemas, datos ni
+        procesos reales de la institución ni de ningún lanzamiento real.
+      </p>
+
+      <h3>Por qué esta ambientación</h3>
+      <p>
+        Un countdown en vivo es un buen ejercicio porque todos entendemos
+        intuitivamente cómo debería comportarse (bajar hasta cero y
+        pararse), sin necesitar conocimiento previo del dominio espacial.
+      </p>
+
+      <h3>Cómo leer el estado</h3>
+      <ul>
+        <li><span class="etiqueta-estado etiqueta-estado--curso">En cuenta regresiva</span> — todavía falta tiempo para el lanzamiento.</li>
+        <li><span class="etiqueta-estado etiqueta-estado--lanzado">¡Lanzado! 🚀</span> — el countdown llegó a cero.</li>
+      </ul>
+
+      <h3>Sobre el ejercicio</h3>
+      <p>
+        Este proyecto fue armado a propósito con un par de errores para que
+        las escuadras los encuentren y corrijan en equipo, con ayuda de una
+        IA. Si llegaste acá buscando pistas del bug: no las vas a encontrar
+        en esta página. 😉
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__contenido">
+      <div>
+        <p class="footer__marca">🛰️ CONAE Lanzamientos (ficticio)</p>
+        <p class="footer__nota">
+          Proyecto ficticio con fines educativos — Taller PIP (Proyecto
+          Ingeniería, FIUBA). Ambientado en CONAE, pero sin relación con
+          sistemas, datos ni procesos reales de la institución.
+        </p>
+      </div>
+      <nav class="footer__links">
+        <a href="index.html">Inicio</a>
+        <a href="acerca.html">Nosotros</a>
+        <a href="lanzamientos.html">Lanzamientos</a>
+        <a href="pasados.html">Lanzamientos pasados</a>
+      </nav>
+    </div>
+    <p class="footer__bottom">Taller PIP · Proyecto Ingeniería, FIUBA</p>
+  </footer>
+
+  <script src="js/tema.js"></script>
+</body>
+</html>

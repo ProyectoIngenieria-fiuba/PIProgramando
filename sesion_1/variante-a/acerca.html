@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros — Panel INVAP (ficticio)</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">
+      <span class="navbar__marca-icono">🔬</span>
+      Panel INVAP <span style="opacity:.6; font-weight:400;">(ficticio)</span>
+    </a>
+    <div class="navbar__links">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="acerca.html">Nosotros</a>
+      <a class="nav__link" href="panel.html">Panel de sensores</a>
+      <a class="nav__link" href="historial.html">Historial de alertas</a>
+      <button id="toggle-tema" class="nav__tema" type="button" aria-label="Cambiar tema">🌙 / ☀️</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="pagina-header">
+      <h1>Nosotros</h1>
+      <p>Quiénes armamos este panel, y qué representa (y qué no).</p>
+    </div>
+
+    <section class="acerca">
+      <h2>Sobre el proyecto</h2>
+      <p>
+        Este panel de monitoreo es un ejercicio del taller PIP (Proyecto
+        Ingeniería, FIUBA). Ambienta un reactor de investigación ficticio,
+        inspirado libremente en INVAP, empresa nacional de tecnología
+        argentina — pero no representa sistemas, datos ni procesos reales
+        de la empresa ni de ningún reactor existente.
+      </p>
+
+      <h3>Por qué esta ambientación</h3>
+      <p>
+        Elegimos un panel de monitoreo porque se parece a herramientas que
+        cualquier ingeniería usa en la vida real (dashboards, semáforos de
+        estado, alertas), sin necesitar conocimiento previo del dominio: con
+        tres números y tres colores alcanza para entender qué está pasando.
+      </p>
+
+      <h3>Cómo leer el semáforo de estado</h3>
+      <ul class="acerca__lista">
+        <li><span class="etiqueta-estado estado-verde">Verde</span> — el sensor está dentro de su rango normal de operación.</li>
+        <li><span class="etiqueta-estado estado-amarillo">Amarillo</span> — el sensor está en una zona intermedia, para vigilar.</li>
+        <li><span class="etiqueta-estado estado-rojo">Rojo</span> — el sensor está fuera del rango seguro y requiere atención.</li>
+      </ul>
+
+      <h3>Sobre el ejercicio</h3>
+      <p>
+        Este proyecto fue armado a propósito con errores para que las
+        escuadras los encuentren y corrijan en equipo, con ayuda de una IA.
+        Si llegaste acá buscando pistas: no las vas a encontrar en esta
+        página. 😉
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__contenido">
+      <div>
+        <p class="footer__marca">🔬 Panel INVAP (ficticio)</p>
+        <p class="footer__nota">
+          Proyecto ficticio con fines educativos — Taller PIP (Proyecto
+          Ingeniería, FIUBA). Ambientado en INVAP, empresa nacional de
+          tecnología argentina, pero sin relación con sistemas, datos ni
+          procesos reales de la empresa.
+        </p>
+      </div>
+      <nav class="footer__links">
+        <a href="index.html">Inicio</a>
+        <a href="acerca.html">Nosotros</a>
+        <a href="panel.html">Panel de sensores</a>
+        <a href="historial.html">Historial de alertas</a>
+      </nav>
+    </div>
+    <p class="footer__bottom">Taller PIP · Proyecto Ingeniería, FIUBA</p>
+  </footer>
+
+  <script src="js/tema.js"></script>
+</body>
+</html>

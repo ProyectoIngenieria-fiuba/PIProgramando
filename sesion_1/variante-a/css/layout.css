@@ -1,0 +1,148 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 24px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar__marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.navbar__marca-icono {
+  font-size: 1.3rem;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nav__link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.nav__link:hover {
+  background: var(--bg-panel-alt);
+  color: var(--text);
+}
+
+.nav__link--activo {
+  background: var(--bg-panel-alt);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.nav__tema {
+  margin-left: 4px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.pagina-header {
+  padding: 32px 0 8px;
+}
+
+.pagina-header h1 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+}
+
+.pagina-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 24px 0;
+  margin-top: 40px;
+}
+
+.footer__contenido {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer__marca {
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.footer__nota {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  max-width: 420px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer__links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer__links a:hover {
+  color: var(--text);
+}
+
+.footer__bottom {
+  max-width: 1100px;
+  margin: 24px auto 0;
+  padding: 16px 0 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    justify-content: center;
+    text-align: center;
+  }
+}

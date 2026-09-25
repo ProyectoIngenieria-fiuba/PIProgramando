@@ -1,0 +1,415 @@
+/* ---------- Botones ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--primario {
+  background: var(--verde);
+  color: #04140a;
+}
+
+.btn--primario:hover {
+  filter: brightness(1.08);
+}
+
+.btn--secundario {
+  background: transparent;
+  border-color: var(--border-soft);
+  color: var(--text);
+}
+
+.btn--secundario:hover {
+  background: var(--bg-panel-alt);
+}
+
+/* ---------- Hero (landing) ---------- */
+
+.hero {
+  padding: 56px 0 48px;
+  text-align: center;
+}
+
+.hero__badge {
+  display: inline-block;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.hero__subtitulo {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 620px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.hero__cta {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Stats teaser (landing) ---------- */
+
+.stats-teaser {
+  margin: 0 0 56px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--sombra);
+}
+
+.stat-card__numero {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-card__label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Nosotros preview (landing) ---------- */
+
+.nosotros-preview {
+  margin: 0 0 56px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.nosotros-preview__texto h2 {
+  margin-top: 0;
+}
+
+.nosotros-preview__texto p {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.nosotros-preview__panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+}
+
+.nosotros-preview__panel h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .nosotros-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Resumen ---------- */
+
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen__item {
+  flex: 1;
+  min-width: 120px;
+  background: var(--bg-panel);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.resumen__numero {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.resumen__label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.resumen__item--total .resumen__numero { color: var(--text); }
+.resumen__item--verde .resumen__numero { color: var(--verde); }
+.resumen__item--amarillo .resumen__numero { color: var(--amarillo); }
+.resumen__item--rojo .resumen__numero { color: var(--rojo); }
+
+/* ---------- Grid de sensores ---------- */
+
+.grid-sensores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.sensor-card {
+  background: var(--bg-panel);
+  border-radius: var(--radio);
+  padding: 18px;
+  border-left: 6px solid var(--border-soft);
+  box-shadow: var(--sombra);
+}
+
+.sensor-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sensor-card__icono {
+  font-size: 1.4rem;
+}
+
+.sensor-card__nombre {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.sensor-card__valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.sensor-card__descripcion {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.sensor-card__link {
+  display: inline-block;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+/* ---------- Colores de estado (compartidos: tarjetas, detalle, etiquetas) ---------- */
+
+.estado-verde,
+.sensor-card.estado-verde {
+  border-left-color: var(--verde);
+  background: var(--verde-bg);
+}
+
+.estado-amarillo,
+.sensor-card.estado-amarillo {
+  border-left-color: var(--amarillo);
+  background: var(--amarillo-bg);
+}
+
+.estado-rojo,
+.sensor-card.estado-rojo {
+  border-left-color: var(--rojo);
+  background: var(--rojo-bg);
+}
+
+.etiqueta-estado {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.etiqueta-estado.estado-verde { color: var(--verde); border-left: none; }
+.etiqueta-estado.estado-amarillo { color: var(--amarillo); border-left: none; }
+.etiqueta-estado.estado-rojo { color: var(--rojo); border-left: none; }
+
+/* ---------- Detalle de sensor ---------- */
+
+.detalle {
+  background: var(--bg-panel);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.detalle__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.detalle__icono {
+  font-size: 2rem;
+}
+
+.detalle__header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.detalle__valor {
+  display: inline-block;
+  font-size: 2.2rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 8px;
+  margin: 0 0 8px;
+}
+
+.detalle__descripcion {
+  color: var(--text-muted);
+  margin: 0 0 20px;
+}
+
+.detalle__volver {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.detalle__no-encontrado {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.gauge {
+  position: relative;
+  display: flex;
+  height: 16px;
+  border-radius: 999px;
+  overflow: visible;
+  background: var(--rojo-bg);
+}
+
+.gauge__zona {
+  height: 100%;
+}
+
+.gauge__zona--verde {
+  background: var(--verde);
+}
+
+.gauge__zona--amarillo {
+  background: var(--amarillo);
+}
+
+.gauge__zona:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.gauge__zona:last-child {
+  border-radius: 0 999px 999px 0;
+}
+
+.gauge__marcador {
+  position: absolute;
+  top: -4px;
+  width: 4px;
+  height: 24px;
+  background: var(--text);
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+.gauge__etiquetas {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  margin-top: 8px;
+}
+
+/* ---------- Historial de alertas ---------- */
+
+.historial {
+  background: var(--bg-panel);
+  border-radius: var(--radio);
+  padding: 12px 20px;
+  box-shadow: var(--sombra);
+}
+
+.historial__vacio {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.alerta-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.alerta-item:last-child {
+  border-bottom: none;
+}
+
+.alerta-item__fecha {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+
+/* ---------- Acerca del proyecto ---------- */
+
+.acerca {
+  background: var(--bg-panel);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+  line-height: 1.6;
+}
+
+.acerca__lista {
+  list-style: none;
+  padding: 0;
+}
+
+.acerca__lista li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 480px) {
+  .resumen {
+    flex-direction: column;
+  }
+}

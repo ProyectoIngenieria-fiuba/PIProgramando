@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lanzamientos — CONAE Lanzamientos (ficticio)</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">
+      <span class="navbar__marca-icono">🛰️</span>
+      CONAE Lanzamientos <span style="opacity:.6; font-weight:400;">(ficticio)</span>
+    </a>
+    <div class="navbar__links">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="acerca.html">Nosotros</a>
+      <a class="nav__link" href="lanzamientos.html">Lanzamientos</a>
+      <a class="nav__link" href="pasados.html">Lanzamientos pasados</a>
+      <button id="toggle-tema" class="nav__tema" type="button" aria-label="Cambiar tema">🌙 / ☀️</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="pagina-header">
+      <h1>Lanzamientos</h1>
+      <p>Countdown en vivo del próximo lanzamiento y lista de misiones programadas.</p>
+    </div>
+
+    <section id="panel">
+      <div class="resumen">
+        <div class="resumen__item">
+          <span class="resumen__numero" id="contador-total">0</span>
+          <span class="resumen__label">Lanzamientos programados</span>
+        </div>
+        <div class="resumen__item">
+          <span class="resumen__numero" id="proxima-mision">—</span>
+          <span class="resumen__label">Próxima misión</span>
+        </div>
+      </div>
+
+      <div class="countdown" id="countdown">
+        <p class="countdown__etiqueta">Próximo lanzamiento</p>
+        <h2 class="countdown__mision" id="countdown-mision"></h2>
+        <p class="countdown__tiempo" id="countdown-tiempo">—</p>
+        <p class="countdown__estado" id="countdown-estado">Cuenta regresiva en curso…</p>
+      </div>
+
+      <div class="lista">
+        <h2>Todos los próximos lanzamientos</h2>
+        <ul id="lista-lanzamientos" class="lista-lanzamientos"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__contenido">
+      <div>
+        <p class="footer__marca">🛰️ CONAE Lanzamientos (ficticio)</p>
+        <p class="footer__nota">
+          Proyecto ficticio con fines educativos — Taller PIP (Proyecto
+          Ingeniería, FIUBA). Ambientado en CONAE, pero sin relación con
+          sistemas, datos ni procesos reales de la institución.
+        </p>
+      </div>
+      <nav class="footer__links">
+        <a href="index.html">Inicio</a>
+        <a href="acerca.html">Nosotros</a>
+        <a href="lanzamientos.html">Lanzamientos</a>
+        <a href="pasados.html">Lanzamientos pasados</a>
+      </nav>
+    </div>
+    <p class="footer__bottom">Taller PIP · Proyecto Ingeniería, FIUBA</p>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/logica.js"></script>
+  <script src="js/ui-lanzamientos.js"></script>
+  <script src="js/tema.js"></script>
+</body>
+</html>

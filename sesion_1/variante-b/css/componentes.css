@@ -1,0 +1,359 @@
+/* ---------- Botones ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--primario {
+  background: var(--acento);
+  color: #041226;
+}
+
+.btn--primario:hover {
+  filter: brightness(1.08);
+}
+
+.btn--secundario {
+  background: transparent;
+  border-color: var(--border-soft);
+  color: var(--text);
+}
+
+.btn--secundario:hover {
+  background: var(--bg-panel-alt);
+}
+
+/* ---------- Hero (landing) ---------- */
+
+.hero {
+  padding: 56px 0 48px;
+  text-align: center;
+}
+
+.hero__badge {
+  display: inline-block;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.hero__subtitulo {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 620px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.hero__cta {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Stats teaser (landing) ---------- */
+
+.stats-teaser {
+  margin: 0 0 56px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--sombra);
+}
+
+.stat-card__numero {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-card__label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Nosotros preview (landing) ---------- */
+
+.nosotros-preview {
+  margin: 0 0 56px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.nosotros-preview__texto h2 {
+  margin-top: 0;
+}
+
+.nosotros-preview__texto p {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.nosotros-preview__panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+}
+
+.nosotros-preview__panel h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .nosotros-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Etiquetas de estado ---------- */
+
+.etiqueta-estado {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.etiqueta-estado--curso {
+  color: var(--acento);
+}
+
+.etiqueta-estado--lanzado {
+  color: var(--exito);
+}
+
+/* ---------- Resumen ---------- */
+
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen__item {
+  flex: 1;
+  min-width: 180px;
+  background: var(--bg-panel);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.resumen__numero {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.resumen__label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Countdown ---------- */
+
+.countdown {
+  background: linear-gradient(160deg, var(--bg-panel), var(--bg));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--sombra);
+  margin-bottom: 32px;
+}
+
+.countdown__etiqueta {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--acento);
+}
+
+.countdown__mision {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+.countdown__tiempo {
+  margin: 0 0 12px;
+  font-size: 2.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.countdown__estado {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.countdown--lanzado {
+  border-color: var(--exito);
+}
+
+.countdown--lanzado .countdown__tiempo {
+  color: var(--exito);
+}
+
+.countdown--lanzado .countdown__estado {
+  color: var(--exito);
+  font-weight: 600;
+}
+
+/* ---------- Lista de lanzamientos ---------- */
+
+.lista h2 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+.lista-lanzamientos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lanzamiento-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  flex-wrap: wrap;
+}
+
+.lanzamiento-item__mision {
+  font-weight: 600;
+  display: block;
+}
+
+.lanzamiento-item__fecha {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.lanzamiento-item__link {
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.lista-vacia {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* ---------- Detalle de lanzamiento ---------- */
+
+.detalle {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.detalle h2 {
+  margin: 0 0 8px;
+}
+
+.detalle__fecha {
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.detalle__descripcion {
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.detalle__etiqueta {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--acento);
+}
+
+.detalle__countdown {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 20px;
+}
+
+.detalle__volver {
+  display: inline-block;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.detalle__no-encontrado {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* ---------- Acerca ---------- */
+
+.acerca {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+  line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .resumen {
+    flex-direction: column;
+  }
+}
