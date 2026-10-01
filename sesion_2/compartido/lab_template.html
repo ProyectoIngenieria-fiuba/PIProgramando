@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITULO__ · SQL Lab</title>
+<!--
+  SQL Lab del taller PIP. Un único archivo: la base de datos va embebida en base64
+  (no hace falta servidor ni internet para la base; solo se descarga sql.js, el motor
+  SQLite compilado a WebAssembly, desde un CDN).
+
+  Este template es AGNÓSTICO de la variante. Lo completa build_lab.py reemplazando:
+    __TITULO__     -> título de la variante
+    __DB_BASE64__  -> el archivo .db codificado en base64
+-->
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --texto: #1c2430; --suave: #5b6675; --borde: #d8dde5;
+    --acento: #0b6bcb; --acento-texto: #ffffff; --acento-suave: #e4f0fc;
+    --ok: #1a7f37; --error-bg: #fdecea; --error-borde: #e5a39b; --error-texto: #8a1c12;
+    --codigo-bg: #fbfcfd; --fila-par: #f3f5f8; --pk: #b7791f; --fk: #7c3aed;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12161c; --panel: #1b212a; --texto: #e6eaf0; --suave: #9aa6b6; --borde: #303845;
+      --acento: #4aa3ff; --acento-texto: #07121f; --acento-suave: #1d3550;
+      --ok: #56d364; --error-bg: #3a1d1b; --error-borde: #7a3b36; --error-texto: #ffb4ab;
+      --codigo-bg: #151a21; --fila-par: #202733; --pk: #f0b84a; --fk: #b794f6;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--bg); color: var(--texto); font: 15px/1.45 var(--sans); }
+  header { display: flex; align-items: baseline; gap: 12px; padding: 10px 16px; background: var(--panel);
+           border-bottom: 1px solid var(--borde); flex-wrap: wrap; }
+  header h1 { font-size: 17px; margin: 0; }
+  header .sub { color: var(--suave); font-size: 13px; }
+  #estado-motor { margin-left: auto; font-size: 13px; color: var(--suave); }
+
+  .app { display: grid; grid-template-columns: 300px 1fr; gap: 12px; padding: 12px; height: calc(100% - 52px); min-height: 520px; }
+  @media (max-width: 860px) { .app { grid-template-columns: 1fr; height: auto; } }
+  .panel { background: var(--panel); border: 1px solid var(--borde); border-radius: 8px; min-width: 0; }
+  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--suave);
+              margin: 0; padding: 10px 12px; border-bottom: 1px solid var(--borde); }
+
+  /* Esquema */
+  #lateral { display: flex; flex-direction: column; overflow: hidden; }
+  #esquema { overflow: auto; padding: 8px 10px; flex: 1; min-height: 160px; max-height: 70vh; }
+  .tabla { margin-bottom: 10px; }
+  .tabla-nombre { font: 600 14px var(--mono); background: none; border: 0; padding: 2px 0; color: var(--acento); cursor: pointer; text-align: left; }
+  .tabla-nombre:hover { text-decoration: underline; }
+  .tabla-nombre small { color: var(--suave); font-weight: 400; }
+  .col { display: flex; gap: 6px; align-items: baseline; font: 12.5px var(--mono); padding: 1px 0 1px 10px; flex-wrap: wrap; }
+  .col .tipo { color: var(--suave); }
+  .tag { font: 700 10px var(--sans); padding: 0 5px; border-radius: 3px; border: 1px solid currentColor; }
+  .tag.pk { color: var(--pk); } .tag.fk { color: var(--fk); }
+  .col .ref { color: var(--fk); }
+  #relaciones { border-top: 1px solid var(--borde); padding: 8px 12px; font: 12px var(--mono); color: var(--suave); max-height: 22vh; overflow: auto; }
+  #relaciones b { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 4px; }
+  #relaciones div { padding: 1px 0; }
+
+  /* Zona principal */
+  #principal { display: flex; flex-direction: column; gap: 12px; min-width: 0; overflow: auto; }
+  #editor { width: 100%; height: 190px; resize: vertical; border: 0; outline: 0; padding: 12px; background: var(--codigo-bg);
+            color: var(--texto); font: 14px/1.5 var(--mono); border-radius: 0 0 8px 8px; tab-size: 2; }
+  #editor:focus { box-shadow: inset 0 0 0 2px var(--acento); }
+  .barra { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--borde); }
+  .barra .sep { flex: 1; }
+  button { font: 600 13px var(--sans); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--borde); background: var(--panel);
+           color: var(--texto); cursor: pointer; }
+  button:hover:not(:disabled) { border-color: var(--acento); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.primario { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); }
+  button.peligro:hover:not(:disabled) { border-color: #d1453b; color: #d1453b; }
+  kbd { font: 11px var(--mono); border: 1px solid var(--borde); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; }
+  #aviso-copia { font-size: 13px; color: var(--ok); min-height: 1em; }
+
+  #resultados { padding: 10px 12px; min-height: 120px; }
+  .meta { color: var(--suave); font-size: 13px; margin: 6px 0; }
+  .aviso { background: var(--acento-suave); border-radius: 6px; padding: 6px 10px; font-size: 13px; margin: 6px 0; }
+  .error { background: var(--error-bg); border: 1px solid var(--error-borde); color: var(--error-texto); border-radius: 6px; padding: 10px 12px; margin: 6px 0; }
+  .error .orig { font: 12.5px var(--mono); margin-top: 6px; opacity: .85; word-break: break-word; }
+  .envoltorio { overflow: auto; max-height: 52vh; border: 1px solid var(--borde); border-radius: 6px; }
+  table.res { border-collapse: collapse; font: 13px var(--mono); width: 100%; }
+  table.res th, table.res td { padding: 4px 10px; border-bottom: 1px solid var(--borde); white-space: nowrap; text-align: left; }
+  table.res th { position: sticky; top: 0; background: var(--panel); border-bottom: 2px solid var(--borde); z-index: 1; }
+  table.res tr:nth-child(even) td { background: var(--fila-par); }
+  table.res td.num { text-align: right; }
+  table.res td.nulo { color: var(--suave); font-style: italic; }
+
+  /* Historial */
+  #historial { padding: 6px 12px 10px; max-height: 220px; overflow: auto; }
+  #historial .item { display: block; width: 100%; text-align: left; font: 12.5px var(--mono); background: none; border: 0;
+                     border-bottom: 1px dashed var(--borde); border-radius: 0; padding: 5px 0; color: var(--texto);
+                     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400; }
+  #historial .item:hover { color: var(--acento); }
+  #historial .vacio { color: var(--suave); font-size: 13px; padding: 6px 0; }
+  #cargando { padding: 30px; text-align: center; color: var(--suave); }
+</style>
+</head>
+<body>
+<header>
+  <h1>__TITULO__</h1>
+  <span class="sub">SQL Lab · base de datos ficticia (SQLite)</span>
+  <span id="estado-motor">Cargando el motor SQL…</span>
+</header>
+
+<div class="app">
+  <aside class="panel" id="lateral">
+    <h2>Esquema de la base</h2>
+    <div id="esquema"><div id="cargando">Cargando…</div></div>
+    <div id="relaciones"></div>
+  </aside>
+
+  <main id="principal">
+    <section class="panel">
+      <div class="barra">
+        <button class="primario" id="btn-ejecutar" disabled>▶ Ejecutar</button>
+        <span class="sub" style="color:var(--suave);font-size:13px"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+        <span class="sep"></span>
+        <button id="btn-esquema-ia" disabled title="Copia el esquema listo para pegarlo en un prompt">Copiar esquema para la IA</button>
+        <button id="btn-reiniciar" class="peligro" disabled title="Vuelve a cargar la base original">↺ Reiniciar base</button>
+      </div>
+      <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
+        aria-label="Editor de consultas SQL"></textarea>
+    </section>
+
+    <section class="panel">
+      <div class="barra">
+        <strong style="font-size:13px">Resultado</strong>
+        <span class="sep"></span>
+        <span id="aviso-copia" aria-live="polite"></span>
+        <button id="btn-json" disabled>Copiar JSON</button>
+        <button id="btn-csv" disabled>Copiar CSV</button>
+        <button id="btn-md" disabled>Copiar Markdown</button>
+      </div>
+      <div id="resultados"><div class="meta">Escribí una consulta y apretá Ejecutar.</div></div>
+    </section>
+
+    <section class="panel">
+      <div class="barra">
+        <strong style="font-size:13px">Historial</strong>
+        <span class="sep"></span>
+        <button id="btn-borrar-historial">Borrar historial</button>
+      </div>
+      <div id="historial"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Motor SQLite (sql.js) desde cdnjs, versión fija. Ambos archivos verificados: sql-wasm.js y sql-wasm.wasm. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script>
+"use strict";
+
+/* ====== Datos inyectados por build_lab.py ====== */
+const TITULO = "__TITULO__";
+const DB_BASE64 = "__DB_BASE64__";
+
+/* ====== Configuración ====== */
+const SQLJS_BASE = "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/";
+const MAX_FILAS = 500;          // filas que se muestran por resultado
+const MAX_HISTORIAL = 50;
+const CLAVE_HISTORIAL = "pip-sqllab-historial:" + TITULO;
+const CONSULTA_INICIAL = "-- Tip: apretá Ctrl/⌘ + Enter para ejecutar.\n-- Podés escribir varias sentencias separadas por ;\n\nSELECT * FROM vuelos LIMIT 10;";
+
+/* ====== Estado ====== */
+let SQL = null;                 // módulo sql.js
+let db = null;                  // base abierta
+let ultimoResultado = null;     // {columnas, filas} del último resultado, para copiar
+let historialMemoria = [];      // respaldo si localStorage falla
+
+const $ = (id) => document.getElementById(id);
+
+/* ====== Utilidades ====== */
+function base64ABytes(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+function abrirBaseOriginal() {
+  if (db) { try { db.close(); } catch (e) { /* ya cerrada */ } }
+  db = new SQL.Database(base64ABytes(DB_BASE64));
+  db.exec("PRAGMA foreign_keys = ON;");
+}
+
+function celdaATexto(v) {
+  if (v === null || v === undefined) return "NULL";
+  if (v instanceof Uint8Array) return "[BLOB " + v.length + " bytes]";
+  return String(v);
+}
+
+function comillarIdent(nombre) {
+  return '"' + String(nombre).replace(/"/g, '""') + '"';
+}
+
+/* ====== Traducción de errores ====== */
+const TRADUCCIONES = [
+  [/no such table: (.+)/i, (m) => `No existe la tabla "${m[1]}". Revisá el nombre en el panel de esquema (¿está bien escrito?).`],
+  [/no such column: (.+)/i, (m) => `No existe la columna "${m[1]}". Fijate el nombre exacto en el panel de esquema y, si usás alias, que esté bien escrito.`],
+  [/ambiguous column name: (.+)/i, (m) => `La columna "${m[1]}" existe en más de una tabla de la consulta. Indicá de cuál querés usarla anteponiendo la tabla o su alias.`],
+  [/near "(.*)": syntax error/i, (m) => `Hay un error de sintaxis cerca de "${m[1]}". Revisá comas, paréntesis, comillas y el orden de las cláusulas.`],
+  [/incomplete input/i, () => "La consulta está incompleta: falta cerrar un paréntesis, una comilla o terminar una cláusula."],
+  [/unrecognized token: "?(.*?)"?$/i, (m) => `SQLite no reconoce "${m[1]}". Puede ser una comilla sin cerrar o un carácter raro (¡ojo con pegar texto con comillas "curvas"!).`],
+  [/no such function: (.+)/i, (m) => `La función ${m[1]} no existe en SQLite. Puede ser de otro motor (PostgreSQL, MySQL…) y acá se escribe distinto.`],
+  [/misuse of aggregate/i, () => "Usaste una función de agregación (COUNT, SUM, AVG…) donde no se puede, por ejemplo dentro de un WHERE."],
+  [/aggregate functions are not allowed in the WHERE/i, () => "No se puede usar una función de agregación (COUNT, SUM, AVG…) en el WHERE."],
+  [/misuse of window function/i, () => "Una función de ventana (… OVER …) está en un lugar donde no se permite."],
+  [/table (.+) already exists/i, (m) => `Ya existe la tabla ${m[1]}. Usá otro nombre o borrala antes con DROP TABLE.`],
+  [/(index|view) (.+) already exists/i, (m) => `Ya existe ${m[1] === "index" ? "el índice" : "la vista"} ${m[2]}.`],
+  [/UNIQUE constraint failed: (.+)/i, (m) => `Valor repetido: ${m[1]} no admite duplicados (restricción UNIQUE o clave primaria).`],
+  [/NOT NULL constraint failed: (.+)/i, (m) => `${m[1]} no puede quedar vacío (NULL).`],
+  [/FOREIGN KEY constraint failed/i, () => "Se rompió una clave foránea: estás apuntando a una fila que no existe, o borrando una fila que otra tabla necesita."],
+  [/CHECK constraint failed/i, () => "El valor no cumple una regla CHECK de la tabla."],
+  [/(\d+) values for (\d+) columns/i, (m) => `Estás insertando ${m[1]} valores en ${m[2]} columnas: tienen que coincidir.`],
+  [/datatype mismatch/i, () => "Los tipos de datos no coinciden (por ejemplo, texto donde se esperaba un número)."],
+  [/ORDER BY term does not match any column/i, () => "Un término del ORDER BY no coincide con ninguna columna del resultado."],
+  [/GROUP BY term out of range/i, () => "El número que usaste en GROUP BY no corresponde a ninguna columna del SELECT."],
+  [/no tables specified/i, () => "Falta indicar la tabla (la cláusula FROM)."],
+  [/no such index|no such view/i, () => "Ese índice o vista no existe."],
+  [/subquery returned more than 1 row|row value misused/i, () => "Una subconsulta devolvió más de un valor donde se esperaba uno solo."],
+];
+
+function traducirError(mensaje) {
+  for (const [re, f] of TRADUCCIONES) {
+    const m = mensaje.match(re);
+    if (m) return f(m);
+  }
+  return "SQLite no pudo ejecutar la consulta. Leé el mensaje original de abajo para encontrar la pista.";
+}
+
+/* ====== Esquema ====== */
+function leerEsquema() {
+  const tablas = [];
+  const r = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name");
+  const filas = r.length ? r[0].values : [];
+  for (const [nombre, sql] of filas) {
+    const info = db.exec("PRAGMA table_info(" + comillarIdent(nombre) + ")")[0];
+    const fks = db.exec("PRAGMA foreign_key_list(" + comillarIdent(nombre) + ")");
+    const mapaFk = {};
+    const relaciones = [];
+    if (fks.length) {
+      for (const f of fks[0].values) {
+        // columnas: id, seq, table, from, to, on_update, on_delete, match
+        mapaFk[f[3]] = f[2] + "." + (f[4] || "id");
+        relaciones.push(nombre + "." + f[3] + " → " + f[2] + "." + (f[4] || "id"));
+      }
+    }
+    const n = db.exec("SELECT COUNT(*) FROM " + comillarIdent(nombre))[0].values[0][0];
+    const columnas = info.values.map((c) => ({ nombre: c[1], tipo: c[2] || "—", notnull: !!c[3], pk: c[5] > 0, fk: mapaFk[c[1]] || null }));
+    tablas.push({ nombre, sql, columnas, relaciones, filas: n });
+  }
+  return tablas;
+}
+
+function pintarEsquema() {
+  const cont = $("esquema");
+  const rel = $("relaciones");
+  cont.textContent = "";
+  rel.textContent = "";
+  let tablas;
+  try { tablas = leerEsquema(); } catch (e) { cont.textContent = "No pude leer el esquema: " + e.message; return; }
+  if (!tablas.length) cont.textContent = "La base no tiene tablas.";
+  const todas = [];
+  for (const t of tablas) {
+    const div = document.createElement("div");
+    div.className = "tabla";
+    const b = document.createElement("button");
+    b.className = "tabla-nombre";
+    b.title = "Click para insertar un SELECT de esta tabla en el editor";
+    b.append(t.nombre + " ");
+    const small = document.createElement("small");
+    small.textContent = "(" + t.filas.toLocaleString("es-AR") + " filas)";
+    b.append(small);
+    b.addEventListener("click", () => insertarEnEditor("SELECT * FROM " + t.nombre + " LIMIT 10;"));
+    div.append(b);
+    for (const c of t.columnas) {
+      const f = document.createElement("div");
+      f.className = "col";
+      const n = document.createElement("span");
+      n.textContent = c.nombre;
+      const ti = document.createElement("span");
+      ti.className = "tipo";
+      ti.textContent = c.tipo;
+      f.append(n, ti);
+      if (c.pk) { const s = document.createElement("span"); s.className = "tag pk"; s.textContent = "PK"; f.append(s); }
+      if (c.fk) {
+        const s = document.createElement("span"); s.className = "tag fk"; s.textContent = "FK"; f.append(s);
+        const r = document.createElement("span"); r.className = "ref"; r.textContent = "→ " + c.fk; f.append(r);
+      }
+      div.append(f);
+    }
+    cont.append(div);
+    todas.push(...t.relaciones);
+  }
+  if (todas.length) {
+    const t = document.createElement("b");
+    t.textContent = "Relaciones (clave foránea)";
+    rel.append(t);
+    for (const r of todas) { const d = document.createElement("div"); d.textContent = r; rel.append(d); }
+  }
+}
+
+function insertarEnEditor(texto) {
+  const ed = $("editor");
+  const ini = ed.selectionStart, fin = ed.selectionEnd;
+  const antes = ed.value.slice(0, ini), despues = ed.value.slice(fin);
+  const pre = antes && !antes.endsWith("\n") ? "\n" : "";
+  const post = despues && !despues.startsWith("\n") ? "\n" : "";
+  ed.value = antes + pre + texto + post + despues;
+  const pos = (antes + pre + texto).length;
+  ed.focus();
+  ed.setSelectionRange(pos, pos);
+}
+
+/* ====== Ejecución ====== */
+function ejecutar() {
+  if (!db) return;
+  const sql = $("editor").value;
+  if (!sql.trim()) return;
+  const cont = $("resultados");
+  cont.textContent = "";
+  ultimoResultado = null;
+  actualizarBotonesCopia();
+
+  const t0 = performance.now();
+  let resultados, modificadas = 0;
+  try {
+    resultados = db.exec(sql);
+    modificadas = db.getRowsModified();
+  } catch (e) {
+    const ms = performance.now() - t0;
+    mostrarError(cont, e.message || String(e), ms);
+    guardarEnHistorial(sql);
+    pintarEsquema(); // por si una sentencia previa del lote ya cambió algo
+    return;
+  }
+  const ms = performance.now() - t0;
+  guardarEnHistorial(sql);
+  pintarEsquema();
+
+  if (!resultados.length) {
+    const d = document.createElement("div");
+    d.className = "meta";
+    d.textContent = "✔ Listo, sin tabla de resultados. " +
+      (modificadas ? "La última sentencia modificó " + modificadas + " fila(s). " : "") +
+      "(" + ms.toFixed(1) + " ms)";
+    cont.append(d);
+    return;
+  }
+
+  resultados.forEach((r, i) => {
+    if (resultados.length > 1) {
+      const t = document.createElement("div");
+      t.className = "meta";
+      t.textContent = "Resultado " + (i + 1) + " de " + resultados.length;
+      cont.append(t);
+    }
+    cont.append(tablaResultado(r));
+    if (i === resultados.length - 1) ultimoResultado = { columnas: r.columns, filas: r.values };
+  });
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.textContent = "Tiempo de ejecución: " + ms.toFixed(1) + " ms";
+  cont.append(meta);
+  actualizarBotonesCopia();
+}
+
+function tablaResultado(r) {
+  const frag = document.createDocumentFragment();
+  const total = r.values.length;
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.textContent = total.toLocaleString("es-AR") + (total === 1 ? " fila" : " filas");
+  frag.append(meta);
+  if (total > MAX_FILAS) {
+    const av = document.createElement("div");
+    av.className = "aviso";
+    av.textContent = "Se muestran las primeras " + MAX_FILAS + " de " + total.toLocaleString("es-AR") +
+      " filas. Los botones de copiar sí incluyen todas.";
+    frag.append(av);
+  }
+  const env = document.createElement("div");
+  env.className = "envoltorio";
+  const tabla = document.createElement("table");
+  tabla.className = "res";
+  const thead = document.createElement("thead");
+  const trh = document.createElement("tr");
+  for (const c of r.columns) { const th = document.createElement("th"); th.textContent = c; trh.append(th); }
+  thead.append(trh);
+  const tbody = document.createElement("tbody");
+  for (const fila of r.values.slice(0, MAX_FILAS)) {
+    const tr = document.createElement("tr");
+    for (const v of fila) {
+      const td = document.createElement("td");
+      if (v === null) { td.className = "nulo"; td.textContent = "NULL"; }
+      else { td.textContent = celdaATexto(v); if (typeof v === "number") td.className = "num"; }
+      tr.append(td);
+    }
+    tbody.append(tr);
+  }
+  tabla.append(thead, tbody);
+  env.append(tabla);
+  frag.append(env);
+  return frag;
+}
+
+function mostrarError(cont, original, ms) {
+  const d = document.createElement("div");
+  d.className = "error";
+  const p = document.createElement("div");
+  p.textContent = "⚠ " + traducirError(original);
+  const o = document.createElement("div");
+  o.className = "orig";
+  o.textContent = "Mensaje original de SQLite: " + original;
+  d.append(p, o);
+  cont.append(d);
+  const m = document.createElement("div");
+  m.className = "meta";
+  m.textContent = "Falló a los " + ms.toFixed(1) + " ms. Si el lote tenía varias sentencias, las anteriores al error sí se ejecutaron.";
+  cont.append(m);
+}
+
+/* ====== Copiar al portapapeles ====== */
+async function copiar(texto, mensaje) {
+  let ok = false;
+  try {
+    if (navigator.clipboard && window.isSecureContext !== false) {
+      await navigator.clipboard.writeText(texto);
+      ok = true;
+    }
+  } catch (e) { ok = false; }
+  if (!ok) {
+    // Respaldo para file:// o navegadores restrictivos
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.append(ta);
+    ta.select();
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    ta.remove();
+  }
+  avisarCopia(ok ? mensaje : "No pude copiar automáticamente. Probá de nuevo.", ok);
+  return ok;
+}
+
+let temporizadorAviso = null;
+function avisarCopia(msg, ok) {
+  const a = $("aviso-copia");
+  a.textContent = (ok ? "✔ " : "⚠ ") + msg;
+  a.style.color = ok ? "var(--ok)" : "var(--error-texto)";
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => { a.textContent = ""; }, 3500);
+}
+
+function actualizarBotonesCopia() {
+  for (const id of ["btn-json", "btn-csv", "btn-md"]) $(id).disabled = !ultimoResultado;
+}
+
+function aJSON(r) {
+  const objs = r.filas.map((fila) => {
+    const o = {};
+    r.columnas.forEach((c, i) => { o[c] = fila[i] instanceof Uint8Array ? "[BLOB]" : fila[i]; });
+    return o;
+  });
+  return JSON.stringify(objs, null, 2);
+}
+function aCSV(r) {
+  const esc = (v) => {
+    if (v === null || v === undefined) return "";
+    const s = celdaATexto(v);
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  return [r.columnas.map(esc).join(",")].concat(r.filas.map((f) => f.map(esc).join(","))).join("\n");
+}
+function aMarkdown(r) {
+  const esc = (v) => celdaATexto(v).replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
+  const enc = "| " + r.columnas.map(esc).join(" | ") + " |";
+  const sep = "| " + r.columnas.map(() => "---").join(" | ") + " |";
+  return [enc, sep].concat(r.filas.map((f) => "| " + f.map(esc).join(" | ") + " |")).join("\n");
+}
+
+function textoEsquemaParaIA() {
+  const tablas = leerEsquema();
+  const partes = [];
+  partes.push("Estoy trabajando con una base de datos SQLite (el motor es SQLite, NO PostgreSQL ni MySQL: " +
+    "usá solamente sintaxis y funciones que existan en SQLite). Este es el esquema, con 3 filas de ejemplo por tabla:\n");
+  for (const t of tablas) {
+    partes.push((t.sql || "").trim().replace(/;?$/, ";"));
+    const r = db.exec("SELECT * FROM " + comillarIdent(t.nombre) + " LIMIT 3");
+    partes.push("-- 3 filas de ejemplo de " + t.nombre + ":");
+    if (r.length) {
+      partes.push("-- " + r[0].columns.join(" | "));
+      for (const f of r[0].values) partes.push("-- " + f.map(celdaATexto).join(" | "));
+    } else {
+      partes.push("-- (tabla vacía)");
+    }
+    partes.push("");
+  }
+  return partes.join("\n");
+}
+
+/* ====== Historial (localStorage opcional) ====== */
+function leerHistorial() {
+  try {
+    const crudo = window.localStorage.getItem(CLAVE_HISTORIAL);
+    if (crudo) { const arr = JSON.parse(crudo); if (Array.isArray(arr)) return arr; }
+  } catch (e) { /* storage bloqueado o JSON roto: usamos memoria */ }
+  return historialMemoria;
+}
+function escribirHistorial(arr) {
+  historialMemoria = arr;
+  try { window.localStorage.setItem(CLAVE_HISTORIAL, JSON.stringify(arr)); } catch (e) { /* sin storage: queda en memoria */ }
+}
+function guardarEnHistorial(sql) {
+  const limpio = sql.trim();
+  if (!limpio) return;
+  const arr = leerHistorial().filter((x) => x !== limpio);
+  arr.unshift(limpio);
+  escribirHistorial(arr.slice(0, MAX_HISTORIAL));
+  pintarHistorial();
+}
+function pintarHistorial() {
+  const cont = $("historial");
+  cont.textContent = "";
+  const arr = leerHistorial();
+  if (!arr.length) {
+    const v = document.createElement("div");
+    v.className = "vacio";
+    v.textContent = "Todavía no ejecutaste ninguna consulta.";
+    cont.append(v);
+    return;
+  }
+  for (const q of arr) {
+    const b = document.createElement("button");
+    b.className = "item";
+    b.textContent = q.replace(/\s+/g, " ");
+    b.title = q;
+    b.addEventListener("click", () => { $("editor").value = q; $("editor").focus(); });
+    cont.append(b);
+  }
+}
+
+/* ====== Arranque ====== */
+function iniciarUI() {
+  $("editor").value = CONSULTA_INICIAL;
+  $("btn-ejecutar").addEventListener("click", ejecutar);
+  $("editor").addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); ejecutar(); }
+  });
+  $("btn-esquema-ia").addEventListener("click", () => {
+    try { copiar(textoEsquemaParaIA(), "Esquema copiado. Pegalo en tu prompt."); }
+    catch (e) { avisarCopia("No pude armar el esquema: " + e.message, false); }
+  });
+  $("btn-json").addEventListener("click", () => ultimoResultado && copiar(aJSON(ultimoResultado), "JSON copiado (" + ultimoResultado.filas.length + " filas)."));
+  $("btn-csv").addEventListener("click", () => ultimoResultado && copiar(aCSV(ultimoResultado), "CSV copiado (" + ultimoResultado.filas.length + " filas)."));
+  $("btn-md").addEventListener("click", () => ultimoResultado && copiar(aMarkdown(ultimoResultado), "Markdown copiado (" + ultimoResultado.filas.length + " filas)."));
+  $("btn-reiniciar").addEventListener("click", () => {
+    if (!window.confirm("Esto descarta todos los cambios que hiciste (tablas creadas, UPDATE, DELETE…) y vuelve a la base original. ¿Seguimos?")) return;
+    abrirBaseOriginal();
+    pintarEsquema();
+    ultimoResultado = null;
+    actualizarBotonesCopia();
+    $("resultados").textContent = "";
+    const m = document.createElement("div");
+    m.className = "meta";
+    m.textContent = "↺ Base reiniciada: volvió al estado original.";
+    $("resultados").append(m);
+  });
+  $("btn-borrar-historial").addEventListener("click", () => { escribirHistorial([]); pintarHistorial(); });
+  pintarHistorial();
+}
+
+function habilitarBotones() {
+  for (const id of ["btn-ejecutar", "btn-esquema-ia", "btn-reiniciar"]) $(id).disabled = false;
+}
+
+function arrancar() {
+  iniciarUI();
+  if (typeof initSqlJs !== "function") {
+    $("estado-motor").textContent = "No se pudo cargar el motor SQL";
+    $("esquema").textContent = "";
+    const d = document.createElement("div");
+    d.className = "error";
+    d.textContent = "No pude descargar sql.js desde internet. Revisá tu conexión y recargá la página (F5). " +
+      "La base de datos ya está dentro de este archivo; lo único que se baja es el motor.";
+    $("resultados").textContent = "";
+    $("resultados").append(d);
+    return;
+  }
+  initSqlJs({ locateFile: (archivo) => SQLJS_BASE + archivo })
+    .then((mod) => {
+      SQL = mod;
+      abrirBaseOriginal();
+      pintarEsquema();
+      habilitarBotones();
+      $("estado-motor").textContent = "Motor listo · SQLite " + (db.exec("select sqlite_version()")[0].values[0][0]);
+      $("editor").focus();
+    })
+    .catch((e) => {
+      $("estado-motor").textContent = "Error al iniciar";
+      const d = document.createElement("div");
+      d.className = "error";
+      d.textContent = "No pude iniciar el motor SQL: " + (e && e.message ? e.message : e);
+      $("resultados").textContent = "";
+      $("resultados").append(d);
+    });
+}
+
+arrancar();
+</script>
+</body>
+</html>
