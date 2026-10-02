@@ -1,4 +1,4 @@
-// Test de humo del SQL Lab (se corre con el runner browser-automation, ver README).
+// Test de humo del SQL Lab (se corre con el runner browser-automation).
 //   node <skill>/browser.mjs file:///.../dist/a-aerolineas/lab.html --script ./test_lab.mjs
 // Devuelve { pasaron, fallaron, detalle }. No toca nada fuera del navegador headless.
 export default async function run(page) {
