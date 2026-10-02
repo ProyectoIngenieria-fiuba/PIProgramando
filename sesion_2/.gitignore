@@ -1,0 +1,9 @@
+# Soluciones y material solo para facilitadores: el repo es público, NO se sube.
+**/facilitadores/
+
+# Bases generadas (se regeneran con build_db.py)
+*.db
+
+# Temporales de Python
+__pycache__/
+*.pyc

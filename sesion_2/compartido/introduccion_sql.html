@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Introducción a SQL y análisis de datos — Taller PIP</title>
+<!-- Fuente del PDF "INTRODUCCION SQL Y DATOS.pdf". Se imprime con build_pdf.mjs (ver README).
+     Los resultados de las consultas del club de barrio son los reales: salen de material/TEORIA.md. -->
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm; }
+  * { box-sizing: border-box; }
+  body { font: 11pt/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1f2937; margin: 0; }
+  h1 { font-size: 22pt; color: #1a2a4a; margin: 0 0 14pt; padding-bottom: 6pt; border-bottom: 3px solid #3b82f6; line-height: 1.2; }
+  h2 { font-size: 15pt; color: #1a2a4a; margin: 22pt 0 8pt; padding-bottom: 4pt; border-bottom: 1px solid #e2e8f0; break-after: avoid; }
+  h3 { font-size: 12pt; color: #1a2a4a; margin: 14pt 0 6pt; break-after: avoid; }
+  p { margin: 0 0 8pt; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  code { font: 9.5pt ui-monospace, "Cascadia Code", Consolas, monospace; background: #eef2f7; padding: 1pt 4pt; border-radius: 3pt; color: #1a2a4a; }
+  pre { background: #1e293b; color: #e2e8f0; border-radius: 6pt; padding: 9pt 12pt; margin: 6pt 0 10pt; font: 9.2pt/1.5 ui-monospace, "Cascadia Code", Consolas, monospace; white-space: pre-wrap; break-inside: avoid; }
+  pre code { background: none; color: inherit; padding: 0; font: inherit; }
+  .k { color: #7dd3fc; } .c { color: #94a3b8; } .s { color: #fcd34d; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 12pt; font-size: 10pt; break-inside: avoid; }
+  th { background: #eef2f7; text-align: left; padding: 5pt 8pt; border: 1px solid #dbe3ec; }
+  td { padding: 5pt 8pt; border: 1px solid #e2e8f0; vertical-align: top; }
+  table.res { width: auto; font-size: 9.5pt; margin: 2pt 0 12pt; }
+  table.res th { background: #f1f5f9; font-family: ui-monospace, Consolas, monospace; font-size: 9pt; }
+  table.res td { font-family: ui-monospace, Consolas, monospace; }
+  .caja { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 8pt 12pt; border-radius: 0 6pt 6pt 0; margin: 8pt 0 12pt; break-inside: avoid; }
+  .alerta { background: #fff7ed; border-left: 4px solid #f97316; padding: 8pt 12pt; border-radius: 0 6pt 6pt 0; margin: 8pt 0 12pt; break-inside: avoid; }
+  .fig { font-family: ui-monospace, Consolas, monospace; font-size: 9.5pt; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 12pt; white-space: pre; margin: 6pt 0 12pt; break-inside: avoid; }
+  .nota { color: #64748b; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<h1>Introducción a SQL y análisis de datos — Taller PIP</h1>
+
+<p>Esta es una <strong>pre-lectura</strong> para el eje de Análisis de datos del taller. La idea es darte las herramientas básicas para que puedas enfocar el tiempo del taller en resolver el problema, no en entender qué es un <code>SELECT</code>.</p>
+
+<p>No hace falta memorizar nada de esto. Es más útil leerlo una vez y volver a mirarlo cuando te trabes con algo puntual, que intentar aprendértelo de memoria antes de escribir una sola consulta. Si más adelante necesitás profundizar, en la carpeta del proyecto hay una <strong>TEORIA.md</strong> más completa.</p>
+
+<h2>¿Qué es una base de datos? ¿Y SQL?</h2>
+
+<p>Casi toda aplicación guarda su información en una <strong>base de datos</strong>: pedidos de una tienda, vuelos de una aerolínea, alumnos de una facultad. Una base de datos relacional organiza esa información en <strong>tablas</strong>, parecidas a una planilla de cálculo:</p>
+
+<ul>
+  <li>Cada <strong>fila</strong> es un registro (un socio, un vuelo, una venta).</li>
+  <li>Cada <strong>columna</strong> es un dato de ese registro (el nombre, la fecha, el monto) y tiene un <strong>tipo</strong> (texto, número…).</li>
+  <li>Cada tabla tiene una <strong>clave primaria</strong> (<code>PRIMARY KEY</code>, o <code>PK</code>): una columna cuyo valor identifica a cada fila de forma única (normalmente un <code>id</code>).</li>
+  <li>Para relacionar tablas, una columna guarda el <code>id</code> de una fila de otra tabla: es una <strong>clave foránea</strong> (<code>FOREIGN KEY</code>, o <code>FK</code>).</li>
+</ul>
+
+<p><strong>SQL</strong> (<em>Structured Query Language</em>) es el lenguaje con el que le <strong>hacés preguntas</strong> a una base de datos: "¿cuántos socios hay en Palermo?", "¿quién debe más cuotas?". Vamos a usar <strong>SQLite</strong>, un motor liviano que en el taller corre directamente en tu navegador, sin instalar nada.</p>
+
+<p>Como ejemplo a lo largo de este documento vamos a usar un <strong>club de barrio</strong> inventado:</p>
+
+<div class="fig">socios ──&lt; inscripciones &gt;── actividades
+  │
+  └──&lt; cuotas
+
+socios      (id, nombre, barrio, fecha_alta, recomendado_por)
+actividades (id, nombre, cupo, precio_mensual)
+inscripciones (socio_id, actividad_id)
+cuotas      (id, socio_id, mes, monto, fecha_pago)</div>
+
+<p class="nota">En el club hay 8 socios, 4 actividades (Natación, Fútbol 5, Yoga y Ajedrez) y 16 cuotas. La flecha <code>──&lt;</code> se lee "uno a muchos": un socio tiene muchas cuotas.</p>
+
+<h2>Cómo vas a trabajar: el SQL Lab</h2>
+
+<p>En el taller vas a usar una herramienta hecha para esto, el <strong>SQL Lab</strong>: una sola página web con la base de datos adentro. Se abre con un link (o con doble click en el archivo) y no hay nada que instalar.</p>
+
+<table>
+  <tr><th style="width:30%">Qué ves</th><th>Para qué sirve</th></tr>
+  <tr><td><strong>Panel de esquema</strong> (a la izquierda)</td><td>Las tablas, sus columnas y tipos, y cuáles son <code>PK</code> y <code>FK</code>. Si hacés click en el nombre de una tabla, se arma un <code>SELECT * … LIMIT 10;</code> en el editor para espiar cómo son los datos.</td></tr>
+  <tr><td><strong>Editor</strong></td><td>Escribís la consulta. <strong>Ctrl/⌘ + Enter</strong> la ejecuta. Podés escribir varias sentencias separadas por <code>;</code>.</td></tr>
+  <tr><td><strong>Resultado</strong></td><td>Una tabla con las filas, la cantidad de filas y el tiempo. Si hay un error, te lo explica en español junto con el mensaje original.</td></tr>
+  <tr><td><strong>Copiar esquema para la IA</strong></td><td>Copia un texto listo para pegar en un prompt: el motor (SQLite), las tablas y 3 filas de ejemplo de cada una.</td></tr>
+  <tr><td><strong>Copiar JSON / CSV / Markdown</strong></td><td>Copia el resultado. El JSON sirve para alimentar el dashboard.</td></tr>
+  <tr><td><strong>Reiniciar base</strong></td><td>Vuelve todo al estado original. Podés probar cualquier cosa sin miedo.</td></tr>
+  <tr><td><strong>Historial</strong></td><td>Guarda las consultas que ejecutaste, para recuperarlas con un click.</td></tr>
+</table>
+
+<h2>Tu primera consulta: SELECT, FROM, WHERE, ORDER BY, LIMIT</h2>
+
+<p>Una consulta <strong>pide datos</strong>, no modifica nada. Se arma con piezas que siempre se escriben en este orden:</p>
+
+<table>
+  <tr><th style="width:26%">Pieza</th><th>Para qué sirve</th></tr>
+  <tr><td><code>SELECT columnas</code></td><td>Qué columnas querés ver (<code>*</code> = todas).</td></tr>
+  <tr><td><code>FROM tabla</code></td><td>De qué tabla.</td></tr>
+  <tr><td><code>WHERE condición</code></td><td>Te quedás solo con las <strong>filas</strong> que cumplen.</td></tr>
+  <tr><td><code>ORDER BY col [DESC]</code></td><td>Cómo ordenás (de menor a mayor por defecto; <code>DESC</code> al revés).</td></tr>
+  <tr><td><code>LIMIT n</code></td><td>Cuántas filas como máximo.</td></tr>
+</table>
+
+<pre><code><span class="k">SELECT</span> nombre, barrio, fecha_alta
+<span class="k">FROM</span> socios
+<span class="k">WHERE</span> barrio = <span class="s">'Palermo'</span>
+<span class="k">ORDER BY</span> fecha_alta <span class="k">DESC</span>
+<span class="k">LIMIT</span> 2;</code></pre>
+
+<table class="res">
+  <tr><th>nombre</th><th>barrio</th><th>fecha_alta</th></tr>
+  <tr><td>Facundo Luna</td><td>Palermo</td><td>2024-09-30</td></tr>
+  <tr><td>Carla Gómez</td><td>Palermo</td><td>2023-01-20</td></tr>
+</table>
+
+<p>Se lee casi como una oración: "de los socios, quedate con los de Palermo, ordenalos del más nuevo al más viejo y mostrame los 2 primeros". Los <strong>textos van entre comillas simples</strong>. Con <code>AS</code> le podés poner un nombre más lindo a una columna (<code>COUNT(*) AS socios</code>).</p>
+
+<h2>Resumir: agregaciones, GROUP BY y HAVING</h2>
+
+<p>Las <strong>funciones de agregación</strong> convierten muchas filas en un número: <code>COUNT</code> (cuántas), <code>SUM</code> (suma), <code>AVG</code> (promedio), <code>MIN</code> y <code>MAX</code>.</p>
+
+<pre><code><span class="k">SELECT</span> <span class="k">COUNT</span>(*) <span class="k">AS</span> socios, <span class="k">MIN</span>(fecha_alta) <span class="k">AS</span> el_mas_antiguo, <span class="k">MAX</span>(fecha_alta) <span class="k">AS</span> el_mas_nuevo
+<span class="k">FROM</span> socios;</code></pre>
+
+<table class="res">
+  <tr><th>socios</th><th>el_mas_antiguo</th><th>el_mas_nuevo</th></tr>
+  <tr><td>8</td><td>2021-03-15</td><td>2025-03-01</td></tr>
+</table>
+
+<p>Con <code>GROUP BY</code> armás un resumen <strong>por grupo</strong>: una fila por cada valor distinto de la columna.</p>
+
+<pre><code><span class="k">SELECT</span> barrio, <span class="k">COUNT</span>(*) <span class="k">AS</span> socios
+<span class="k">FROM</span> socios
+<span class="k">GROUP BY</span> barrio
+<span class="k">HAVING</span> <span class="k">COUNT</span>(*) &gt;= 3;</code></pre>
+
+<table class="res">
+  <tr><th>barrio</th><th>socios</th></tr>
+  <tr><td>Caballito</td><td>3</td></tr>
+  <tr><td>Palermo</td><td>3</td></tr>
+</table>
+
+<div class="caja"><strong><code>WHERE</code> vs <code>HAVING</code>:</strong> <code>WHERE</code> filtra <em>filas</em>, <em>antes</em> de agrupar. <code>HAVING</code> filtra <em>grupos</em>, <em>después</em> de agrupar (por eso es el único que puede usar <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>…). Si la condición habla de una cantidad o un promedio, va en <code>HAVING</code>.</div>
+
+<h2>Unir tablas: JOIN</h2>
+
+<p>La información está repartida: la tabla <code>inscripciones</code> solo guarda dos números (<code>socio_id</code> y <code>actividad_id</code>). Para saber el <em>nombre</em> de la actividad hay que ir a buscarlo a <code>actividades</code>. Eso hace <code>JOIN</code>: <strong>une las filas de dos tablas</strong> cuando se cumple una condición (<code>ON</code>), casi siempre "la clave foránea de una es igual a la clave primaria de la otra".</p>
+
+<pre><code><span class="k">SELECT</span> a.nombre <span class="k">AS</span> actividad, <span class="k">COUNT</span>(*) <span class="k">AS</span> inscriptos
+<span class="k">FROM</span> inscripciones i
+<span class="k">JOIN</span> actividades a <span class="k">ON</span> a.id = i.actividad_id
+<span class="k">GROUP BY</span> a.id
+<span class="k">ORDER BY</span> inscriptos <span class="k">DESC</span>;</code></pre>
+
+<table class="res">
+  <tr><th>actividad</th><th>inscriptos</th></tr>
+  <tr><td>Natación</td><td>5</td></tr>
+  <tr><td>Yoga</td><td>4</td></tr>
+  <tr><td>Fútbol 5</td><td>4</td></tr>
+</table>
+
+<p>Fijate dos cosas. Primero, los <strong>alias</strong> (<code>i</code>, <code>a</code>): son apodos cortos para las tablas, y se usan como <code>alias.columna</code>. Cuando dos tablas tienen una columna con el mismo nombre (como <code>id</code>), el alias es obligatorio para que SQLite sepa de cuál hablás. Segundo: <strong>Ajedrez no aparece</strong>, porque nadie se inscribió. El <code>JOIN</code> común (<code>INNER JOIN</code>) solo deja las filas que tienen pareja en <em>las dos</em> tablas.</p>
+
+<p>Si querés conservar <em>todas</em> las filas de la tabla de la izquierda aunque no tengan pareja, usás <code>LEFT JOIN</code> (las columnas de la derecha quedan en <code>NULL</code>):</p>
+
+<pre><code><span class="k">SELECT</span> a.nombre <span class="k">AS</span> actividad, <span class="k">COUNT</span>(i.socio_id) <span class="k">AS</span> inscriptos
+<span class="k">FROM</span> actividades a
+<span class="k">LEFT JOIN</span> inscripciones i <span class="k">ON</span> i.actividad_id = a.id
+<span class="k">GROUP BY</span> a.id
+<span class="k">ORDER BY</span> inscriptos;</code></pre>
+
+<table class="res">
+  <tr><th>actividad</th><th>inscriptos</th></tr>
+  <tr><td>Ajedrez</td><td>0</td></tr>
+  <tr><td>Fútbol 5</td><td>4</td></tr>
+  <tr><td>Yoga</td><td>4</td></tr>
+  <tr><td>Natación</td><td>5</td></tr>
+</table>
+
+<p>Dos situaciones más que vas a encontrar: a veces una tabla se refiere <strong>a sí misma</strong> (en el club, <code>recomendado_por</code> apunta a otro socio) y a veces una misma tabla juega <strong>dos papeles</strong> en la consulta (por ejemplo una tabla de lugares que sirve de origen y de destino). En ambos casos se une la tabla <strong>dos veces con dos alias distintos</strong>, uno por cada papel.</p>
+
+<div class="alerta"><strong>Cuidado: un JOIN puede duplicar filas.</strong> Si cada fila de una tabla tiene <em>varias</em> parejas en la otra, se repite una vez por cada pareja. Si después sumás una columna de la tabla original, el total sale inflado. Un buen hábito: <strong>comparar el total antes y después de cada JOIN</strong>.</div>
+
+<h2>Cuatro cosas que traen sorpresas</h2>
+
+<h3>1. NULL: la ausencia de dato</h3>
+<p><code>NULL</code> no es cero ni vacío: significa <strong>"no hay dato"</strong> (por ejemplo, una cuota que todavía no se pagó no tiene <code>fecha_pago</code>). Tres reglas: no se compara con <code>=</code> sino con <code>IS NULL</code> / <code>IS NOT NULL</code>; <code>5 + NULL</code> da <code>NULL</code>; y funciones como <code>AVG</code> y <code>SUM</code> <strong>ignoran</strong> los <code>NULL</code>.</p>
+
+<pre><code><span class="c">-- Devuelve 0 filas SIEMPRE: nada es "igual" a NULL</span>
+<span class="k">SELECT</span> * <span class="k">FROM</span> cuotas <span class="k">WHERE</span> fecha_pago = <span class="k">NULL</span>;
+
+<span class="c">-- Esta sí funciona</span>
+<span class="k">SELECT</span> * <span class="k">FROM</span> cuotas <span class="k">WHERE</span> fecha_pago <span class="k">IS NULL</span>;</code></pre>
+
+<h3>2. COUNT(*) no es lo mismo que COUNT(columna)</h3>
+<table>
+  <tr><th style="width:34%">Forma</th><th>Qué cuenta</th></tr>
+  <tr><td><code>COUNT(*)</code></td><td>Todas las filas.</td></tr>
+  <tr><td><code>COUNT(columna)</code></td><td>Las filas donde esa columna <strong>no es NULL</strong>.</td></tr>
+  <tr><td><code>COUNT(DISTINCT columna)</code></td><td>Los valores distintos.</td></tr>
+</table>
+<p>La resta <code>COUNT(*) − COUNT(columna)</code> te dice cuántos <code>NULL</code> hay en esa columna: una forma rapidísima de <em>explorar</em> los datos.</p>
+
+<h3>3. La división entera</h3>
+<p>En SQLite, si dividís <strong>dos enteros</strong>, el resultado es un entero: se tira la parte decimal.</p>
+
+<pre><code><span class="k">SELECT</span> a.nombre, <span class="k">COUNT</span>(*) <span class="k">AS</span> inscriptos, a.cupo,
+       <span class="k">COUNT</span>(*) / a.cupo        <span class="k">AS</span> mal,
+       1.0 * <span class="k">COUNT</span>(*) / a.cupo  <span class="k">AS</span> bien
+<span class="k">FROM</span> inscripciones i <span class="k">JOIN</span> actividades a <span class="k">ON</span> a.id = i.actividad_id
+<span class="k">GROUP BY</span> a.id;</code></pre>
+
+<table class="res">
+  <tr><th>nombre</th><th>inscriptos</th><th>cupo</th><th>mal</th><th>bien</th></tr>
+  <tr><td>Natación</td><td>5</td><td>20</td><td>0</td><td>0.25</td></tr>
+  <tr><td>Fútbol 5</td><td>4</td><td>10</td><td>0</td><td>0.4</td></tr>
+  <tr><td>Yoga</td><td>4</td><td>4</td><td>1</td><td>1</td></tr>
+</table>
+<p>La solución: que <em>uno</em> de los números sea decimal (multiplicar por <code>1.0</code>, o por <code>100.0</code> si querés porcentaje). Un porcentaje que da 0 o 1 justo es una señal de alarma.</p>
+
+<h3>4. Las fechas son texto</h3>
+<p>SQLite no tiene un tipo "fecha": se guardan como texto <code>AAAA-MM-DD</code>, que por suerte se ordena bien. Para sacar el año o el mes se usa <code>strftime</code>: <code>strftime('%Y', fecha)</code> da el año, <code>strftime('%Y-%m', fecha)</code> el año-mes. Devuelve <em>texto</em>; si lo necesitás como número, <code>CAST(… AS INTEGER)</code>.</p>
+
+<h2>CASE WHEN: decidir fila por fila</h2>
+
+<p><code>CASE</code> es el "si… entonces… sino" de SQL. Sirve para clasificar, y también para <strong>contar o sumar solo lo que cumple una condición</strong> dentro de un <code>GROUP BY</code>:</p>
+
+<pre><code><span class="k">SELECT</span> mes,
+       <span class="k">COUNT</span>(*) <span class="k">AS</span> cuotas,
+       <span class="k">SUM</span>(<span class="k">CASE WHEN</span> fecha_pago <span class="k">IS NULL THEN</span> 1 <span class="k">ELSE</span> 0 <span class="k">END</span>) <span class="k">AS</span> impagas,
+       <span class="k">ROUND</span>(100.0 * <span class="k">SUM</span>(<span class="k">CASE WHEN</span> fecha_pago <span class="k">IS NOT NULL THEN</span> 1 <span class="k">ELSE</span> 0 <span class="k">END</span>) / <span class="k">COUNT</span>(*), 1) <span class="k">AS</span> pct_pagadas
+<span class="k">FROM</span> cuotas
+<span class="k">GROUP BY</span> mes;</code></pre>
+
+<table class="res">
+  <tr><th>mes</th><th>cuotas</th><th>impagas</th><th>pct_pagadas</th></tr>
+  <tr><td>2025-03</td><td>8</td><td>1</td><td>87.5</td></tr>
+  <tr><td>2025-04</td><td>8</td><td>3</td><td>62.5</td></tr>
+</table>
+
+<p>Este patrón (un <code>CASE</code> adentro de un <code>SUM</code> o un <code>AVG</code>) es la forma típica de calcular <strong>porcentajes</strong>, como "qué porcentaje de las cuotas se pagó".</p>
+
+<h2>Pasos siguientes: subconsultas, CTE y funciones de ventana</h2>
+
+<p>Cuando una consulta necesita un resultado intermedio, podés ponerle nombre con <code>WITH</code> (una <strong>CTE</strong>) y usarlo después como si fuera una tabla. Y cuando necesitás "numerar" o comparar filas <em>dentro de un grupo</em> sin colapsarlas, existen las <strong>funciones de ventana</strong>, con la forma <code>RANK() OVER (PARTITION BY grupo ORDER BY criterio)</code>. No hace falta dominarlas antes del taller: en la <strong>TEORIA.md</strong> hay ejemplos resueltos para cuando las necesites.</p>
+
+<h2>Pensar como analista, no solo escribir consultas</h2>
+
+<p>Escribir SQL es la parte fácil. Lo difícil es que el número <strong>sea el correcto</strong>. Los datos reales vienen sucios: hay huecos, valores escritos de distintas formas, filas repetidas por un <code>JOIN</code>. Por eso el proyecto del taller pide hacer cuatro cosas, siempre:</p>
+
+<ol>
+  <li><strong>Traducir la pregunta de negocio a una definición.</strong> "Puntualidad" o "ocupación" no significan nada hasta que alguien decide cómo se calculan: ¿qué cuenta como puntual?, ¿qué pasa con los vuelos cancelados? No hay una respuesta única, pero sí una regla: <strong>escribila y aplicala igual en todas las consultas</strong> (en el taller se llama <em>diccionario de métricas</em>).</li>
+  <li><strong>Explorar antes de preguntar.</strong> Mirá las columnas que vas a usar: qué valores distintos tienen, cuáles son el mínimo y el máximo, si hay <code>NULL</code>. Dos minutos de exploración te ahorran una hora de números raros.</li>
+  <li><strong>Verificar con controles cruzados.</strong> ¿La suma de las partes da el total? ¿Algún porcentaje pasa de 100? ¿El total cambió después de un <code>JOIN</code>? Si algo no cierra, no lo entregues: buscá por qué.</li>
+  <li><strong>Contar qué encontraste.</strong> Un número suelto no sirve; sirve "el 40 % de las demoras se concentra en X, y recomiendo Y".</li>
+</ol>
+
+<h2>Trabajar con IA</h2>
+
+<p>En el taller vas a poder usar una IA para escribir consultas. Puede ahorrarte mucho tiempo, pero con un límite importante: <strong>la IA no conoce tus datos</strong>. Si le pedís algo sin darle contexto, va a inventar nombres de columnas o a usar la sintaxis de otro motor. Reglas simples:</p>
+
+<ul>
+  <li><strong>Pasale siempre el esquema</strong> (el botón "Copiar esquema para la IA" del Lab lo hace por vos) y aclarale que el motor es <strong>SQLite</strong>.</li>
+  <li><strong>Explorá los datos primero</strong> y contale lo que encontraste (por ejemplo, qué valores tiene una columna).</li>
+  <li><strong>Leé la consulta antes de ejecutarla</strong>, en el orden en que SQLite la resuelve: <code>FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</code>. Pedile que te la explique línea por línea.</li>
+  <li><strong>Verificá el resultado</strong>, siempre. Una consulta que corre sin error no es una consulta correcta.</li>
+</ul>
+
+<p>Hay una guía completa de esto (<strong>GUIA_IA.md</strong>) en el proyecto.</p>
+
+<h2>Y cuando los datos están mal armados: normalización</h2>
+
+<p>A veces una tabla está pensada de una forma que genera problemas: el mismo dato repetido en muchas filas, columnas como <code>causa_1</code>, <code>causa_2</code>, <code>causa_3</code>, o el mismo concepto escrito de tres maneras distintas. <strong>Normalizar</strong> es reorganizar esa tabla para que <em>cada dato viva en un solo lugar</em>, repartiéndolo en varias tablas unidas por claves. Las "formas normales" son reglas para detectar qué está mal:</p>
+
+<table>
+  <tr><th style="width:12%">Forma</th><th>Regla en una frase</th><th>Se rompe cuando…</th></tr>
+  <tr><td><strong>1FN</strong></td><td>Una celda, un valor.</td><td>Hay listas dentro de una celda o columnas repetidas (<code>causa_1</code>, <code>causa_2</code>).</td></tr>
+  <tr><td><strong>2FN</strong></td><td>Cada dato depende de la clave <em>entera</em>.</td><td>La clave tiene varias columnas y un dato depende solo de una de ellas.</td></tr>
+  <tr><td><strong>3FN</strong></td><td>Los datos dependen de la clave, no de otro dato.</td><td>Hay cadenas: la matrícula determina el modelo, y el modelo determina la capacidad.</td></tr>
+</table>
+
+<p>Si llegás a la parte de normalización, vas a limpiar una tabla desordenada, diseñar las tablas nuevas, mover los datos con <code>INSERT INTO … SELECT DISTINCT …</code> y comprobar con un <code>JOIN</code> que no perdiste nada. En la <strong>TEORIA.md</strong> hay un ejemplo resuelto de punta a punta con el club de barrio.</p>
+
+<h2>Cheatsheet</h2>
+
+<table>
+  <tr><th style="width:36%">Quiero…</th><th>Uso…</th></tr>
+  <tr><td>Ver unas filas de una tabla</td><td><code>SELECT * FROM tabla LIMIT 10;</code></td></tr>
+  <tr><td>Contar filas</td><td><code>COUNT(*)</code></td></tr>
+  <tr><td>Un resumen por grupo</td><td><code>GROUP BY</code></td></tr>
+  <tr><td>Filtrar filas / filtrar grupos</td><td><code>WHERE</code> / <code>HAVING</code></td></tr>
+  <tr><td>Juntar dos tablas</td><td><code>JOIN … ON a.id = b.a_id</code> (o <code>LEFT JOIN</code>)</td></tr>
+  <tr><td>Saber si falta un dato</td><td><code>IS NULL</code> / <code>IS NOT NULL</code></td></tr>
+  <tr><td>Calcular un porcentaje</td><td><code>100.0 * a / b</code> (¡con decimal!)</td></tr>
+  <tr><td>Contar solo lo que cumple algo</td><td><code>SUM(CASE WHEN … THEN 1 ELSE 0 END)</code></td></tr>
+  <tr><td>Sacar el mes de una fecha</td><td><code>strftime('%Y-%m', fecha)</code></td></tr>
+  <tr><td>Pasos intermedios con nombre</td><td><code>WITH nombre AS (…)</code></td></tr>
+  <tr><td>Numerar filas dentro de un grupo</td><td><code>RANK() OVER (PARTITION BY … ORDER BY …)</code></td></tr>
+  <tr><td>Deshacer un desastre</td><td>Botón <strong>Reiniciar base</strong> del Lab</td></tr>
+</table>
+
+<div class="caja">Con esto alcanza para arrancar. En el taller van a equivocarse, y está perfecto: <strong>un error de SQL no rompe nada</strong>, y los mensajes del Lab te explican qué pasó. Lo importante es leer lo que devuelve la consulta y preguntarse si tiene sentido.</div>
+
+</body>
+</html>
