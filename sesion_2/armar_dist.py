@@ -67,7 +67,7 @@ def main():
     if os.path.exists(pdf):
         shutil.copy(pdf, os.path.join(DIST, PDF))
     else:
-        print("AVISO: falta '%s'. Generalo con compartido/build_pdf.mjs (ver README)." % PDF)
+        print("AVISO: falta '%s'. Generalo con compartido/build_pdf.mjs (el comando está en el encabezado de ese archivo)." % PDF)
     print("Armando dist/:")
     for nombre in pedidas:
         armar(nombre)

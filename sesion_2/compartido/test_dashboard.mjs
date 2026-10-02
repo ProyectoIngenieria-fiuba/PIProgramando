@@ -1,4 +1,4 @@
-// Test de humo del dashboard base. Correr con el runner browser-automation (ver README):
+// Test de humo del dashboard base. Correr con el runner browser-automation:
 //   node <skill>/browser.mjs file:///.../compartido/dashboard_base.html --script ./test_dashboard.mjs
 export default async function run(page) {
   const r = [];
