@@ -2,7 +2,7 @@
 
 > ¿Nunca escribieron una consulta SQL, o hace mucho que no lo hacen? Antes de arrancar,
 > dense una vuelta por
-> [INTRODUCCION SQL Y DATOS.pdf](../../INTRODUCCION%20SQL%20Y%20DATOS.pdf) (15-20 minutos
+> [INTRODUCCION SQL Y DATOS.pdf](INTRODUCCION%20SQL%20Y%20DATOS.pdf) (15-20 minutos
 > con lo básico que van a necesitar). Y cuando algo puntual no les cierre, tienen la
 > [TEORIA.md](TEORIA.md) para consultar.
 
@@ -34,14 +34,14 @@ Cada escuadra es el equipo de análisis que responde ese pedido.
 
 No hace falta instalar nada. Todo corre en el navegador.
 
-1. **Abran el SQL Lab:** [abrir el SQL Lab](LINK_AL_LAB). Es un editor de SQL con la base ya cargada.
+1. **Abran el SQL Lab:** descarguen [lab.html](lab.html) y ábranlo con doble click (ver el paso 1 de abajo). Es un editor de SQL con la base ya cargada.
    Tienen el esquema (las tablas y sus columnas) a la izquierda.
 2. **Exploren antes de preguntar.** Hagan click en cada tabla del panel izquierdo: eso arma un
    `SELECT * … LIMIT 10;` para ver cómo son los datos. Apretar **Ctrl/⌘ + Enter** ejecuta lo que
    escribieron. Si se equivocan en algo grave (un `DELETE`, un `UPDATE`), el botón **"Reiniciar base"**
    vuelve todo al principio.
 3. **Armen el equipo de trabajo.** Decidan quién comparte pantalla y quién redacta el diccionario
-   de métricas y el *prompt log* (ver Entregables). Después, arranquen con la P1. Si usan IA, empiecen
+   de métricas y el *prompt log*. Después, arranquen con la P1. Si usan IA, empiecen
    por el botón **"Copiar esquema para la IA"** (lean la [GUIA_IA.md](GUIA_IA.md)).
 
 ## Cómo ejecutar cada cosa (paso a paso)
@@ -52,8 +52,8 @@ sus archivos alcanza con un editor de texto simple (Bloc de notas, VS Code, el q
 
 ### 1. Abrir el Lab
 
-Click en el link de arriba. Si prefieren tenerlo en su compu, descarguen `lab.html` y abranlo con **doble click**
-(funciona igual, siempre con internet). Esperen unos segundos hasta que arriba a la derecha diga **"Motor listo"**:
+`lab.html` es un único archivo con todo adentro. **Descárguenlo** (si lo ven en GitHub, botón *Download raw file*, o *Guardar enlace como…*)
+y ábranlo con **doble click**: se abre en el navegador. Hace falta internet. Esperen unos segundos hasta que arriba a la derecha diga **"Motor listo"**:
 hasta entonces los botones están apagados.
 
 ### 2. Escribir y ejecutar una consulta
@@ -96,11 +96,6 @@ En la barra **"Resultado"** (justo arriba de la tabla) hay tres botones: **Copia
 6. **Guarden el archivo como `dashboard.html`** y ábranlo con doble click en el navegador (necesita internet para dibujar los gráficos).
 7. Si una tarjeta aparece en rojo, no se rompió nada: el mensaje dice qué columna no encuentra. Revisen los nombres.
 
-### 7. Entregar
-
-Junten sus archivos (`consultas.sql`, el diccionario de métricas, el prompt log, `dashboard.html` y, si llegaron a E5,
-el diccionario de normalización y `normalizacion.sql`) en una carpeta y entréguenla **como les indique su facilitador**
-(por ejemplo, subiéndola a una carpeta compartida o comprimida en un `.zip`).
 
 ## Qué hay en la base
 
@@ -156,25 +151,6 @@ Encaren los extras en orden. No hace falta llegar al final para que la actividad
   - (d) Migren los datos con `INSERT INTO … SELECT DISTINCT …`.
   - (e) Validen que, con un `JOIN`, se reconstruye la tabla original ya limpia.
 
-## Ritmo sugerido
-
-Es una referencia, no una regla. Si se trabaron en algo, pidan ayuda al facilitador.
-
-| Bloque | Tiempo |
-|---|---|
-| Explorar el Lab y la base | 10 min |
-| P1 a P6 | ≈ 45 min |
-| E1 + E2 | ≈ 20 min |
-| E3 (dashboard y recomendación) | ≈ 20 min |
-| E4 o E5 | 25-30 min c/u |
-
-## Qué tienen que entregar
-
-1. **Un archivo `.sql`** con todas sus consultas, cada una con un comentario que diga a qué pregunta responde.
-2. **Un diccionario de métricas**: las decisiones que tomaron (qué es "puntual", qué hacen con los cancelados, qué hacen con los desviados, cómo calculan la ocupación) y por qué.
-3. **El prompt log**: una copia de los prompts que usaron con la IA, y qué hicieron con la respuesta (la plantilla está en la [GUIA_IA.md](GUIA_IA.md)).
-4. **El `dashboard.html`** (si llegaron a E3).
-5. **Solo si llegaron a E5:** un **diccionario de normalización** (valor original → valor normalizado, y el criterio) y un archivo `normalizacion.sql`.
 
 ## Checklist de validación
 

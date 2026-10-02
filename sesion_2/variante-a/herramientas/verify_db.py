@@ -224,7 +224,7 @@ def verificar_solucion(ruta_db):
 
     SOLUCION.md vive en facilitadores/ (no se publica). Si no está, se avisa y se sigue.
     """
-    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "facilitadores", "SOLUCION.md")
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "facilitadores", "SOLUCION.md")
     if not os.path.exists(ruta):
         print("\n[AVISO] No hay facilitadores/SOLUCION.md en este clon (no se publica): se omite el punto de control 3.")
         return
@@ -259,8 +259,8 @@ def verificar_solucion(ruta_db):
 
 
 def verificar_teoria():
-    """Los ejemplos de material/TEORIA.md (club de barrio) corren y devuelven lo documentado."""
-    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "material", "TEORIA.md")
+    """Los ejemplos de TEORIA.md (club de barrio) corren y devuelven lo documentado."""
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "TEORIA.md")
     print("\n--- Ejemplos de TEORIA.md (club de barrio) ---")
     con = sqlite3.connect(":memory:")
     con.execute("PRAGMA foreign_keys = ON")

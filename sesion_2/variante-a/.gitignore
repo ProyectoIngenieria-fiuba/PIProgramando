@@ -1,7 +1,7 @@
 # Soluciones y material solo para facilitadores: el repo es público, NO se sube.
-**/facilitadores/
+facilitadores/
 
-# Bases generadas (se regeneran con build_db.py)
+# Bases generadas (se regeneran con herramientas/armar.py)
 *.db
 
 # Temporales de Python

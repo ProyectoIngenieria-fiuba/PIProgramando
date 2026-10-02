@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Inyecta una base SQLite en el template del SQL Lab.
+"""Inyecta una base SQLite en el template del SQL Lab y escribe lab.html.
 
-Uso:
-    python build_lab.py <variante> <ruta_db> "<Título>"
+Uso (desde variante-a/herramientas/):
+    python build_lab.py <ruta_db> "<Título>" [salida.html]
 Ejemplo:
-    python build_lab.py a-aerolineas ../variante-a/aerolineas.db "Torre de control · Aerolíneas"
+    python build_lab.py aerolineas.db "Torre de control · Aerolíneas"
 
-Escribe ../dist/<variante>/lab.html. Solo biblioteca estándar.
+Por defecto escribe ../lab.html (el archivo que usan los participantes).
+Solo biblioteca estándar.
 """
 import base64
 import html
@@ -15,10 +16,10 @@ import sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(AQUI, "lab_template.html")
-DIST = os.path.join(AQUI, "..", "dist")
+SALIDA_POR_DEFECTO = os.path.normpath(os.path.join(AQUI, "..", "lab.html"))
 
 
-def construir(variante, ruta_db, titulo):
+def construir(ruta_db, titulo, destino=SALIDA_POR_DEFECTO):
     with open(TEMPLATE, encoding="utf-8") as f:
         plantilla = f.read()
     for marcador in ("__TITULO__", "__DB_BASE64__"):
@@ -34,22 +35,21 @@ def construir(variante, ruta_db, titulo):
         raise SystemExit('No encontré la línea: const TITULO = "__TITULO__";')
     plantilla = partes[0].replace("__TITULO__", html.escape(titulo)) + 'const TITULO = "%s";' % en_js + \
         partes[1].replace("__TITULO__", html.escape(titulo))
+
     # Solo la línea del const: el marcador también se nombra en un comentario.
     linea_db = 'const DB_BASE64 = "__DB_BASE64__";'
     if plantilla.count(linea_db) != 1:
         raise SystemExit("No encontré la línea: " + linea_db)
     plantilla = plantilla.replace(linea_db, 'const DB_BASE64 = "%s";' % b64)
 
-    destino_dir = os.path.normpath(os.path.join(DIST, variante))
-    os.makedirs(destino_dir, exist_ok=True)
-    destino = os.path.join(destino_dir, "lab.html")
+    os.makedirs(os.path.dirname(destino), exist_ok=True)
     with open(destino, "w", encoding="utf-8", newline="\n") as f:
         f.write(plantilla)
     return destino
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) not in (3, 4):
         raise SystemExit(__doc__)
-    out = construir(sys.argv[1], sys.argv[2], sys.argv[3])
+    out = construir(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) == 4 else SALIDA_POR_DEFECTO)
     print("Lab generado: %s (%.0f KB)" % (out, os.path.getsize(out) / 1024))

@@ -2,7 +2,7 @@
 
 Referencia para consultar cuando algo no les cierre. **No hace falta leerla entera antes de
 arrancar**: usen el índice y vuelvan a ella con la duda puntual. (Si es la primera vez que ven SQL,
-la [introducción en PDF](../../INTRODUCCION%20SQL%20Y%20DATOS.pdf) es una mejor puerta de entrada.)
+la [introducción en PDF](INTRODUCCION%20SQL%20Y%20DATOS.pdf) es una mejor puerta de entrada.)
 
 Todos los ejemplos de acá usan un **club de barrio** inventado (socios, cuotas, actividades),
 *no* los datos de la aerolínea. Así pueden probar cada idea sin que les adelante nada del proyecto.

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Completa los resultados de material/TEORIA.md ejecutando sus consultas.
+"""Completa los resultados de TEORIA.md ejecutando sus consultas.
 
 Los ejemplos de la teoría usan un club de barrio inventado (no la base de aerolíneas):
 corren sobre una base vacía en memoria, así que acá no hay nada de la solución.
 
-Uso (desde variante-a/):  python generar_teoria.py
+Uso (desde variante-a/herramientas/):  python generar_teoria.py
 """
 import os
 import sqlite3
@@ -12,7 +12,7 @@ import sys
 
 import solucion_util as su
 
-RUTA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "material", "TEORIA.md")
+RUTA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "TEORIA.md")
 
 
 def main():

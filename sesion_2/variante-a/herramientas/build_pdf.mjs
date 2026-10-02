@@ -1,6 +1,6 @@
 // Imprime introduccion_sql.html a PDF (A4) usando el runner de browser-automation.
-//   node <skill>/browser.mjs file:///.../compartido/introduccion_sql.html --script ./build_pdf.mjs
-// Escribe ../INTRODUCCION SQL Y DATOS.pdf (junto a variante-a/, igual que en sesion_1).
+//   node <skill>/browser.mjs file:///.../variante-a/herramientas/introduccion_sql.html --script ./build_pdf.mjs
+// Escribe ../INTRODUCCION SQL Y DATOS.pdf (dentro de variante-a/).
 import { fileURLToPath } from "node:url";
 
 export default async function run(page) {
