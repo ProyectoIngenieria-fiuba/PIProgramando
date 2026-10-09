@@ -1,0 +1,14 @@
+# Soluciones y material solo para facilitadores: el repo es público, NO se sube.
+facilitadores/
+
+# Herramientas internas de los facilitadores (generador de datos y verificación).
+# No se suben: los datos ya viajan embebidos en el notebook.
+herramientas/
+
+# Temporales
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Chat de diseño de la sesión: describe dónde está la fuga, NO se sube.
+Chat con claude.docx
